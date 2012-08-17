@@ -14,8 +14,8 @@ L.Marker = L.Class.extend({
 		keyboard: true,
 		zIndexOffset: 0,
 		opacity: 1,
-		riseOnHover: false,
-		riseOffset: 250
+		bringToFront: true,
+		bringToFrontZOffset: 250
 	},
 
 	initialize: function (latlng, options) {
@@ -127,8 +127,13 @@ L.Marker = L.Class.extend({
 
 		L.DomUtil.addClass(icon, classToAdd);
 
-		if (options.keyboard) {
-			icon.tabIndex = '0';
+			L.DomUtil.addClass(this._icon, classToAdd);
+
+			if (options.bringToFront) {
+				L.DomEvent
+					.on(this._icon, 'mouseover', this._bringToFront, this)
+					.on(this._icon, 'mouseout', this._sendToBack, this);
+			}
 		}
 
 		this._icon = icon;
@@ -180,8 +185,13 @@ L.Marker = L.Class.extend({
 
 		this._map._panes.markerPane.removeChild(this._icon);
 
-		this._icon = null;
-	},
+		if (this.options.bringToFront) {
+			L.DomEvent
+				.off(this._icon, 'mouseover', this._bringToFront)
+				.off(this._icon, 'mouseout', this._sendToBack);
+		}
+
+		panes.markerPane.removeChild(this._icon);
 
 	_removeShadow: function () {
 		if (this._shadow) {
@@ -300,11 +310,17 @@ L.Marker = L.Class.extend({
 	},
 
 	_bringToFront: function () {
-		this._updateZIndex(this.options.riseOffset);
+		this._offsetIconZIndex(this.options.bringToFrontZOffset);
 	},
 
-	_resetZIndex: function () {
-		this._updateZIndex(0);
+	_sendToBack: function () {
+		this._offsetIconZIndex(this.options.bringToFrontZOffset * -1);
+	},
+
+	_offsetIconZIndex: function (offset) {
+		var icon = this._icon,
+			zIndex = parseInt(icon.style.zIndex, 10);
+		icon.style.zIndex = zIndex + offset;
 	}
 });
 
