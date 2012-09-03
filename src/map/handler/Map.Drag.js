@@ -11,6 +11,8 @@ L.Map.mergeOptions({
 	inertiaThreshold: L.Browser.touch ? 32 : 18, // ms
 	easeLinearity: 0.25,
 
+	touchContextMenuEmulation: true,
+
 	// TODO refactor, move to CRS
 	worldCopyJump: false
 });
@@ -18,9 +20,9 @@ L.Map.mergeOptions({
 L.Map.Drag = L.Handler.extend({
 	addHooks: function () {
 		if (!this._draggable) {
-			var map = this._map;
+			var options = this._map.options;
 
-			this._draggable = new L.Draggable(map._mapPane, map._container);
+			this._draggable = new L.Draggable(this._map._mapPane, this._map._container, options.touchContextMenuEmulation);
 
 			this._draggable.on({
 				'dragstart': this._onDragStart,
@@ -28,7 +30,7 @@ L.Map.Drag = L.Handler.extend({
 				'dragend': this._onDragEnd
 			}, this);
 
-			if (map.options.worldCopyJump) {
+			if (options.worldCopyJump) {
 				this._draggable.on('predrag', this._onPreDrag, this);
 				map.on('viewreset', this._onViewReset, this);
 
