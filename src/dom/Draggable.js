@@ -49,7 +49,8 @@ L.Draggable = L.Class.extend({
 	_onDown: function (e) {
 		this._moved = false;
 
-		if (e.shiftKey || ((e.which !== 1) && (e.button !== 1) && !e.touches)) { return; }
+		L.DomEvent.preventDefault(e);
+		L.DomEvent.stopPropagation(e);
 
 		L.DomEvent
 			.stopPropagation(e);
