@@ -6940,14 +6940,14 @@ L.Control.MousePosition = L.Control.extend({
 	__format: function (val, pos, neg, precision) {
 		var scale = Math.pow(10, precision),
 		    extra = pos,
-		    p_val = Math.round(val * scale) / scale;
+		    p_val = parseFloat(Math.round(val * scale) / scale);
 
 		if (p_val < 0.0) {
 			p_val *= -1.0;
 			extra = neg;
 		}
 
-		return p_val + extra;
+		return p_val.toFixed(precision) + extra;
 	}
 });
 
