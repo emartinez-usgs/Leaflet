@@ -42,3 +42,6 @@
 .leaflet-control-attribution, .leaflet-control-layers {
 	background: white;
 	}
+.leaflet-control-scale, .leaflet-control-mouseposition {
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorStr='#3FFFFFFF',EndColorStr='#FFFFFFF');
+	}

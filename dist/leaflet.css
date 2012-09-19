@@ -373,6 +373,7 @@
 	border: 2px dotted #05f;
 	background: white;
 	opacity: 0.5;
+	filter:alpha(opacity=50);
 	}
 .leaflet-div-icon {
     background: #fff;
