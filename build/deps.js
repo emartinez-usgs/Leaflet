@@ -220,6 +220,12 @@ var deps = {
 		desc: 'Scale control.'
 	},
 
+	ControlMousePosition: {
+		src: ['control/Control.js',
+		      'control/Control.MousePosition.js'],
+		desc: 'Mouse Position Control'
+	},
+
 	ControlLayers: {
 		src: ['control/Control.js',
 		      'map/ext/Map.Control.js',
