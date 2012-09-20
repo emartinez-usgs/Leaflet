@@ -30,8 +30,33 @@ L.Map.include(!L.DomUtil.TRANSITION ? {} : {
 		}
 	},
 
-	_nothingToAnimate: function () {
-		return !this._container.getElementsByClassName('leaflet-zoom-animated').length;
+	_runAnimation: function (center, zoom, scale, origin, backwardsTransform) {
+		this._animateToCenter = center;
+		this._animateToZoom = zoom;
+		this._animatingZoom = true;
+
+		if (L.Draggable) {
+			L.Draggable._disabled = true;
+		}
+
+		var transform = L.DomUtil.TRANSFORM,
+			tileBg = this._tileBg;
+
+		clearTimeout(this._clearTileBgTimer);
+
+		//dumb FireFox hack, I have no idea why this magic zero translate fixes the scale transition problem
+		if (L.Browser.gecko || window.opera || L.Browser.ie3d) {
+			tileBg.style[transform] += ' translate(0,0)';
+		}
+
+		L.Util.falseFn(tileBg.offsetWidth); //hack to make sure transform is updated before running animation
+
+		var scaleStr = L.DomUtil.getScaleString(scale, origin),
+			oldTransform = tileBg.style[transform];
+
+		tileBg.style[transform] = backwardsTransform ?
+			oldTransform + ' ' + scaleStr :
+			scaleStr + ' ' + oldTransform;
 	},
 
 	_tryAnimatedZoom: function (center, zoom, options) {
