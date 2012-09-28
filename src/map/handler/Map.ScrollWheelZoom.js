@@ -3,7 +3,7 @@
  */
 
 L.Map.mergeOptions({
-	scrollWheelZoom: true
+	scrollWheelZoom: !L.Browser.touch || L.Browser.msTouch
 });
 
 L.Map.ScrollWheelZoom = L.Handler.extend({

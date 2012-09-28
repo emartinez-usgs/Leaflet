@@ -1,14 +1,76 @@
 (function() {
-	function getFiles() {
-		var memo = {},
-		    files = [],
-		    i, src;
+	//TODO replace script list with the one from ../buid/deps.js
+	var scripts = [
+		'Leaflet.js',
 
-		function addFiles(srcs) {
-			for (var j = 0, len = srcs.length; j < len; j++) {
-				memo[srcs[j]] = true;
-			}
-		}
+		'core/Util.js',
+		'core/Class.js',
+		'core/Events.js',
+		'core/Browser.js',
+
+		'geometry/Point.js',
+		'geometry/Bounds.js',
+		'geometry/Transformation.js',
+		'geometry/LineUtil.js',
+		'geometry/PolyUtil.js',
+
+		'dom/DomEvent.js',
+		'dom/DomEvent.DoubleTap.js',
+		'dom/DomEvent.MsTouch.js',
+		'dom/DomUtil.js',
+		'dom/Draggable.js',
+
+		'dom/PosAnimation.js',
+		'dom/PosAnimation.Timer.js',
+		// 'dom/transition/Transition.js',
+		// 'dom/transition/Transition.Native.js',
+		// 'dom/transition/Transition.Timer.js',
+
+		'geo/LatLng.js',
+		'geo/LatLngBounds.js',
+
+		'geo/projection/Projection.js',
+		'geo/projection/Projection.SphericalMercator.js',
+		'geo/projection/Projection.LonLat.js',
+		'geo/projection/Projection.Mercator.js',
+
+		'geo/crs/CRS.js',
+		'geo/crs/CRS.EPSG3857.js',
+		'geo/crs/CRS.EPSG4326.js',
+		'geo/crs/CRS.EPSG3395.js',
+
+		'map/Map.js',
+
+		'map/ext/Map.Geolocation.js',
+		'map/ext/Map.Popup.js',
+		'map/ext/Map.Control.js',
+
+		'map/anim/Map.PanAnimation.js',
+		'map/anim/Map.ZoomAnimation.js',
+
+		'core/Handler.js',
+		'map/handler/Map.Drag.js',
+		'map/handler/Map.TouchZoom.js',
+		'map/handler/Map.DoubleClickZoom.js',
+		'map/handler/Map.ScrollWheelZoom.js',
+		'map/handler/Map.BoxZoom.js',
+		'map/handler/Map.Keyboard.js',
+
+		'layer/LayerGroup.js',
+		'layer/FeatureGroup.js',
+
+		'layer/tile/TileLayer.js',
+		'layer/tile/TileLayer.WMS.js',
+		'layer/tile/TileLayer.Canvas.js',
+		'layer/ImageOverlay.js',
+		'layer/Popup.js',
+
+		'layer/marker/Icon.js',
+		'layer/marker/Icon.Default.js',
+		'layer/marker/DivIcon.js',
+		'layer/marker/Marker.js',
+		'layer/marker/Marker.Popup.js',
+		'layer/marker/Marker.Drag.js',
 
 		for (i in deps) {
 			addFiles(deps[i].src);
