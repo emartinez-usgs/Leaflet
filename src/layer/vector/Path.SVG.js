@@ -127,6 +127,10 @@ L.Path = L.Path.extend({
 		if (this._map.dragging && this._map.dragging.moved()) { return; }
 
 		this._fireMouseEvent(e);
+
+		if (this.hasEventListeners(e.type)) {
+			L.DomEvent.stopPropagation(e);
+		}
 	},
 
 	_fireMouseEvent: function (e) {
