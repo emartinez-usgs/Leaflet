@@ -253,16 +253,11 @@ L.Marker = L.Class.extend({
 	},
 
 	_onMouseClick: function (e) {
-		var wasDragged = this.dragging && this.dragging.moved();
-
-		if (this.hasEventListeners(e.type) || wasDragged) {
+		if (this.hasEventListeners(e.type)) {
 			L.DomEvent.stopPropagation(e);
 		}
-
-		if (wasDragged) { return; }
-
-		if ((!this.dragging || !this.dragging._enabled) && this._map.dragging && this._map.dragging.moved()) { return; }
-
+		if (this.dragging && this.dragging.moved()) { return; }
+		if (this._map.dragging && this._map.dragging.moved()) { return; }
 		this.fire(e.type, {
 			originalEvent: e,
 			latlng: this._latlng
