@@ -69,7 +69,7 @@ L.Marker = L.Class.extend({
 
 		this.update();
 
-		return this.fire('move', { latlng: this._latlng });
+		this.fire('move', { latlng: this._latlng });
 	},
 
 	setZIndexOffset: function (offset) {

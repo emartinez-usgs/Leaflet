@@ -19,15 +19,8 @@ L.Marker.include({
 		return this;
 	},
 
-	togglePopup: function () {
-		if (this._popup) {
-			if (this._popup._isOpen) {
-				this.closePopup();
-			} else {
-				this.openPopup();
-			}
-		}
-		return this;
+	movePopup: function (e) {
+		this._popup.setLatLng(e.latlng);
 	},
 
 	bindPopup: function (content, options) {
@@ -41,12 +34,11 @@ L.Marker.include({
 
 		options = L.extend({offset: anchor}, options);
 
-		if (!this._popupHandlersAdded) {
+		if (!this._popup) {
 			this
-			    .on('click', this.togglePopup, this)
-			    .on('remove', this.closePopup, this)
-			    .on('move', this._movePopup, this);
-			this._popupHandlersAdded = true;
+				.on('click', this.openPopup, this)
+				.on('remove', this.closePopup, this)
+				.on('move', this.movePopup, this);
 		}
 
 		if (content instanceof L.Popup) {
