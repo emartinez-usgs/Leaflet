@@ -63,10 +63,9 @@ L.Marker.include({
 		if (this._popup) {
 			this._popup = null;
 			this
-			    .off('click', this.togglePopup, this)
-			    .off('remove', this.closePopup, this)
-			    .off('move', this._movePopup, this);
-			this._popupHandlersAdded = false;
+				.off('click', this.openPopup)
+				.off('remove', this.closePopup)
+				.off('move', this.movePopup);
 		}
 		return this;
 	},
