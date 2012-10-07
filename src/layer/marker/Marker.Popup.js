@@ -19,10 +19,6 @@ L.Marker.include({
 		return this;
 	},
 
-	movePopup: function (e) {
-		this._popup.setLatLng(e.latlng);
-	},
-
 	bindPopup: function (content, options) {
 		var anchor = L.point(this.options.icon.options.popupAnchor || [0, 0]);
 
