@@ -127,14 +127,12 @@ L.Path = L.Path.extend({
 		if (this._map.dragging && this._map.dragging.moved()) { return; }
 
 		this._fireMouseEvent(e);
-
-		if (this.hasEventListeners(e.type)) {
-			L.DomEvent.stopPropagation(e);
-		}
 	},
 
 	_fireMouseEvent: function (e) {
-		if (!this.hasEventListeners(e.type)) { return; }
+		if (!this.hasEventListeners(e.type)) {
+			return;
+		}
 
 		var map = this._map,
 		    containerPoint = map.mouseEventToContainerPoint(e),
@@ -147,6 +145,10 @@ L.Path = L.Path.extend({
 			containerPoint: containerPoint,
 			originalEvent: e
 		});
+
+		if (e.type === 'contextmenu') {
+			L.DomEvent.preventDefault(e);
+		}
 		L.DomEvent.stopPropagation(e);
 	}
 });
