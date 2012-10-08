@@ -147,13 +147,7 @@ L.Path = L.Path.extend({
 			containerPoint: containerPoint,
 			originalEvent: e
 		});
-
-		if (e.type === 'contextmenu') {
-			L.DomEvent.preventDefault(e);
-		}
-		if (e.type !== 'mousemove') {
-			L.DomEvent.stopPropagation(e);
-		}
+		L.DomEvent.stopPropagation(e);
 	}
 });
 
