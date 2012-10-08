@@ -60,8 +60,14 @@ L.Draggable = L.Class.extend({
 		L.DomUtil.disableImageDrag();
 		L.DomUtil.disableTextSelection();
 
-		var first = e.touches ? e.touches[0] : e,
-		    el = first.target;
+		if (e.touches && e.touches.length > 1) {
+			this._simulateClick = false;
+			clearTimeout(this._contextMenuTimeout);
+			return;
+		}
+
+		var first = (e.touches && e.touches.length === 1 ? e.touches[0] : e),
+			el = first.target;
 
 		// if touching a link, highlight it
 		if (L.Browser.touch && el.tagName.toLowerCase() === 'a') {
