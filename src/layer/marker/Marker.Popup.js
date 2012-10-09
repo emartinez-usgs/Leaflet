@@ -34,7 +34,7 @@ L.Marker.include({
 			this
 				.on('click', this.openPopup, this)
 				.on('remove', this.closePopup, this)
-				.on('move', this.movePopup, this);
+				.on('move', this._movePopup, this);
 		}
 
 		if (content instanceof L.Popup) {
@@ -61,7 +61,7 @@ L.Marker.include({
 			this
 				.off('click', this.openPopup)
 				.off('remove', this.closePopup)
-				.off('move', this.movePopup);
+				.off('move', this._movePopup);
 		}
 		return this;
 	},
