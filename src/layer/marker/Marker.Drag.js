@@ -43,11 +43,11 @@ L.Handler.MarkerDrag = L.Handler.extend({
 		L.DomUtil.addClass(this._marker._icon, 'leaflet-marker-dragging');
 	},
 
-	_onDrag: function () {
+	_onDrag: function (e) {
 		var marker = this._marker,
-		    shadow = marker._shadow,
-		    iconPos = L.DomUtil.getPosition(marker._icon),
-		    latlng = marker._map.layerPointToLatLng(iconPos);
+			shadow = marker._shadow,
+			iconPos = L.DomUtil.getPosition(marker._icon),
+			latlng = marker._map.layerPointToLatLng(iconPos);
 
 		// update shadow position
 		if (shadow) {
@@ -57,8 +57,8 @@ L.Handler.MarkerDrag = L.Handler.extend({
 		marker._latlng = latlng;
 
 		marker
-		    .fire('move', {latlng: latlng})
-		    .fire('drag');
+			.fire('move')
+			.fire('drag');
 	},
 
 	_onDragEnd: function () {
