@@ -211,10 +211,9 @@ L.Control.Layers = L.Control.extend({
 
 	_onInputClick: function () {
 		var i, input, obj,
-		    inputs = this._form.getElementsByTagName('input'),
-		    inputsLen = inputs.length;
-
-		this._handlingClick = true;
+			inputs = this._form.getElementsByTagName('input'),
+			inputsLen = inputs.length,
+			baseLayer;
 
 		for (i = 0; i < inputsLen; i++) {
 			input = inputs[i];
@@ -222,13 +221,17 @@ L.Control.Layers = L.Control.extend({
 
 			if (input.checked && !this._map.hasLayer(obj.layer)) {
 				this._map.addLayer(obj.layer);
-
+				if (!obj.overlay) {
+					baseLayer = obj.layer;
+				}
 			} else if (!input.checked && this._map.hasLayer(obj.layer)) {
 				this._map.removeLayer(obj.layer);
 			}
 		}
 
-		this._handlingClick = false;
+		if (baseLayer) {
+			this._map.fire('baselayerchange', {layer: baseLayer})
+		}
 	},
 
 	_expand: function () {
