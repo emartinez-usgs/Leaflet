@@ -195,9 +195,10 @@ L.Map = L.Class.extend({
 			layer.on('load', this._onTileLayerLoad, this);
 		}
 
-		if (this._loaded) {
-			this._layerAdd(layer);
-		}
+		this.whenReady(function () {
+			layer.onAdd(this);
+			this.fire('layeradd', {layer: layer});
+		}, this);
 
 		return this;
 	},
@@ -734,6 +735,15 @@ L.Map = L.Class.extend({
 	_layerAdd: function (layer) {
 		layer.onAdd(this);
 		this.fire('layeradd', {layer: layer});
+	},
+
+	whenReady: function (callback, context) {
+		if (this._loaded) {
+			callback.call(context || this, this);
+		} else {
+			this.on('load', callback, context);
+		}
+		return this;
 	},
 
 
