@@ -111,9 +111,21 @@ L.Draggable = L.Class.extend({
 		this.fire('drag');
 	},
 
-	_onUp: function () {
-		if (!L.Browser.touch) {
-			L.DomUtil.removeClass(document.body, 'leaflet-dragging');
+	_onUp: function (e) {
+		var moved = this._moved;
+		if (this._simulateClick && e.changedTouches) {
+			var first = e.changedTouches[0],
+				el = first.target,
+				dist = (this._newPos && this._newPos.distanceTo(this._startPos)) || 0;
+
+			if (el.tagName.toLowerCase() === 'a') {
+				L.DomUtil.removeClass(el, 'leaflet-active');
+			}
+
+			if (dist < L.Draggable.TAP_TOLERANCE) {
+				this._moved = false;
+				this._simulateEvent('click', first);
+			}
 		}
 
 		for (var i in L.Draggable.MOVE) {
@@ -125,7 +137,7 @@ L.Draggable = L.Class.extend({
 		L.DomUtil.enableImageDrag();
 		L.DomUtil.enableTextSelection();
 
-		if (this._moved) {
+		if (moved) {
 			// ensure drag is not fired after dragend
 			L.Util.cancelAnimFrame(this._animRequest);
 
