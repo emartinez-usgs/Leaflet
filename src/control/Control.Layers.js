@@ -1,4 +1,3 @@
-
 L.Control.Layers = L.Control.extend({
 	options: {
 		collapsed: true,
@@ -197,7 +196,7 @@ L.Control.Layers = L.Control.extend({
 		}
 
 		if (baseLayer) {
-			this._map.fire('baselayerchange', {layer: baseLayer})
+			this._map.fire('baselayerchange', {layer: baseLayer});
 		}
 	},
 
