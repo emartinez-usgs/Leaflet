@@ -33,10 +33,10 @@ L.LatLng.prototype = {
 		return margin <= L.LatLng.MAX_MARGIN;
 	},
 
-	toString: function (precision) { // (Number) -> String
+	toString: function (precision) { // -> String
 		return 'LatLng(' +
-		        L.Util.formatNum(this.lat, precision) + ', ' +
-		        L.Util.formatNum(this.lng, precision) + ')';
+				L.Util.formatNum(this.lat, precision) + ', ' +
+				L.Util.formatNum(this.lng, precision) + ')';
 	},
 
 	// Haversine distance formula, see http://en.wikipedia.org/wiki/Haversine_formula
