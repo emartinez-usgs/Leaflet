@@ -45,7 +45,3 @@
 .leaflet-zoom-box {
 	filter: alpha(opacity=50);
 	}
-.leaflet-control-attribution {
-	border-top: 1px solid #bbb;
-	border-left: 1px solid #bbb;
-	}
