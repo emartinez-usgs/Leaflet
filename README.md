@@ -11,7 +11,7 @@ It can also be extended with many [plugins][],
 has a beautiful, easy to use and [well-documented][] API
 and a simple, readable [source code][] that is a joy to [contribute][] to.
 
-For more information, check out the [official website][].
+Check out the website for more information: [leafletjs.com](http://leafletjs.com)
 
 We're happy to meet new contributors.
 If you want to **get involved** with Leaflet development, check out the [contribution guide][contribute].
