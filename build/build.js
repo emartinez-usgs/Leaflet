@@ -164,30 +164,6 @@ exports.test = function() {
 	if (isArgv('--chrome')) {
 		testConfig.browsers.push('Chrome');
 	}
-	if (isArgv('--safari')) {
-		testConfig.browsers.push('Safari');
-	}
-	if (isArgv('--ff')) {
-		testConfig.browsers.push('Firefox');
-	}
-	if (isArgv('--ie')) {
-		testConfig.browsers.push('IE');
-	}
-
-	if (isArgv('--cov')) {
-		testConfig.preprocessors = {
-			'../src/**/*.js': 'coverage'
-		};
-		testConfig.coverageReporter = {
-			type : 'html',
-			dir : 'coverage/'
-		};
-		testConfig.reporters = ['coverage'];
-	}
-
-	karma.server.start(testConfig);
-
-	function isArgv(optName) {
-		return process.argv.indexOf(optName) !== -1;
-	}
+	var delta = newContent.replace(/\r\n?/g, '\n').length - oldContent.replace(/\r\n?/g, '\n').length;
+	return (delta >= 0 ? '+' : '') + delta;
 };
