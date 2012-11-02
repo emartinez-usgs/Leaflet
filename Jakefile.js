@@ -1,7 +1,9 @@
 /*
 Leaflet building, testing and linting scripts.
 
-To use, install Node, then run the following commands in the project root:
+var COPYRIGHT = '/*\n Copyright (c) 2010-2012, CloudMade, Vladimir Agafonkin\n' +
+                ' Leaflet is an open-source JavaScript library for mobile-friendly interactive maps.\n' +
+                ' http://leafletjs.com\n*/\n';
 
     npm install -g jake
     npm install
