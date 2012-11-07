@@ -87,9 +87,7 @@ L.Icon = L.Class.extend({
 			}
 			el.src = src;
 		} else {
-			if (!el) {
-				el = document.createElement('div');
-			}
+			el = document.createElement('div');
 			el.style.filter =
 			        'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + src + '")';
 		}

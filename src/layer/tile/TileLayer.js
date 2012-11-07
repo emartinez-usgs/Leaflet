@@ -187,8 +187,8 @@ L.TileLayer = L.Class.extend({
 
 	_setAutoZIndex: function (pane, compare) {
 
-		var layers = pane.children,
-		    edgeZIndex = -compare(Infinity, -Infinity), // -Infinity for max, Infinity for min
+		var layers = pane.getElementsByClassName('leaflet-layer'),
+		    edgeZIndex = -compare(Infinity, -Infinity), // -Ifinity for max, Infinity for min
 		    zIndex, i, len;
 
 		for (i = 0, len = layers.length; i < len; i++) {
@@ -245,9 +245,17 @@ L.TileLayer = L.Class.extend({
 		}
 	},
 
-	_reset: function (e) {
-		for (var key in this._tiles) {
-			this.fire('tileunload', {tile: this._tiles[key]});
+	_resetCallback: function (e) {
+		this._reset(e.hard);
+	},
+
+	_reset: function (clearOldContainer) {
+		var tiles = this._tiles;
+
+		for (var key in tiles) {
+			if (tiles.hasOwnProperty(key)) {
+				this.fire('tileunload', {tile: tiles[key]});
+			}
 		}
 
 		this._tiles = {};
@@ -283,18 +291,23 @@ L.TileLayer = L.Class.extend({
 
 		if (!this._map) { return; }
 
-		var map = this._map,
-		    bounds = map.getPixelBounds(),
-		    zoom = map.getZoom(),
-		    tileSize = this._getTileSize();
+		var bounds = this._map.getPixelBounds(),
+		    zoom = this._map.getZoom(),
+		    tileSize = this.options.tileSize;
 
 		if (zoom > this.options.maxZoom || zoom < this.options.minZoom) {
 			return;
 		}
 
-		var tileBounds = L.bounds(
-		        bounds.min.divideBy(tileSize)._floor(),
-		        bounds.max.divideBy(tileSize)._floor());
+		var nwTilePoint = new L.Point(
+		        Math.floor(bounds.min.x / tileSize),
+		        Math.floor(bounds.min.y / tileSize)),
+
+		    seTilePoint = new L.Point(
+		        Math.floor(bounds.max.x / tileSize),
+		        Math.floor(bounds.max.y / tileSize)),
+
+		    tileBounds = new L.Bounds(nwTilePoint, seTilePoint);
 
 		this._addTilesFromCenterOut(tileBounds);
 
@@ -403,13 +416,12 @@ L.TileLayer = L.Class.extend({
 			L.DomUtil.removeClass(tile, 'leaflet-tile-loaded');
 			this._unusedTiles.push(tile);
 
-		} else if (tile.parentNode === this._tileContainer) {
-			this._tileContainer.removeChild(tile);
+		} else if (tile.parentNode === this._container) {
+			this._container.removeChild(tile);
 		}
 
 		// for https://github.com/CloudMade/Leaflet/issues/137
 		if (!L.Browser.android) {
-			tile.onload = null;
 			tile.src = L.Util.emptyImageUrl;
 		}
 
@@ -425,6 +437,7 @@ L.TileLayer = L.Class.extend({
 		/*
 		Chrome 20 layouts much faster with top/left (verify with timeline, frames)
 		Android 4 browser has display issues with top/left and requires transform instead
+		Android 3 browser not tested
 		Android 2 browser requires top/left or tiles disappear on load or first drag
 		(reappear after zoom) https://github.com/CloudMade/Leaflet/issues/866
 		(other browsers don't currently care) - see debug/hacks/jitter.html for an example
@@ -456,7 +469,7 @@ L.TileLayer = L.Class.extend({
 
 	_getTilePos: function (tilePoint) {
 		var origin = this._map.getPixelOrigin(),
-		    tileSize = this._getTileSize();
+		    tileSize = this.options.tileSize;
 
 		return tilePoint.multiplyBy(tileSize).subtract(origin);
 	},
@@ -496,6 +509,12 @@ L.TileLayer = L.Class.extend({
 	_getSubdomain: function (tilePoint) {
 		var index = Math.abs(tilePoint.x + tilePoint.y) % this.options.subdomains.length;
 		return this.options.subdomains[index];
+	},
+
+	_createTileProto: function () {
+		var img = this._tileImg = L.DomUtil.create('img', 'leaflet-tile');
+		img.style.width = img.style.height = this.options.tileSize + 'px';
+		img.galleryimg = 'no';
 	},
 
 	_getTile: function () {

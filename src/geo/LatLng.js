@@ -35,8 +35,8 @@ L.LatLng.prototype = {
 
 	toString: function (precision) { // -> String
 		return 'LatLng(' +
-				L.Util.formatNum(this.lat, precision) + ', ' +
-				L.Util.formatNum(this.lng, precision) + ')';
+		        L.Util.formatNum(this.lat, precision) + ', ' +
+		        L.Util.formatNum(this.lng, precision) + ')';
 	},
 
 	// Haversine distance formula, see http://en.wikipedia.org/wiki/Haversine_formula

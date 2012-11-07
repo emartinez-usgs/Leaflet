@@ -190,8 +190,8 @@ L.Marker = L.Class.extend({
 
 		if (this.options.riseOnHover) {
 			L.DomEvent
-				.off(this._icon, 'mouseover', this._bringToFront)
-				.off(this._icon, 'mouseout', this._resetZIndex);
+			    .off(this._icon, 'mouseover', this._bringToFront)
+			    .off(this._icon, 'mouseout', this._resetZIndex);
 		}
 
 		panes.markerPane.removeChild(this._icon);
@@ -232,7 +232,7 @@ L.Marker = L.Class.extend({
 		// TODO refactor into something shared with Map/Path/etc. to DRY it up
 
 		var icon = this._icon,
-		    events = ['dblclick', 'mousedown', 'mouseover', 'mouseout', 'contextmenu'];
+		    events = ['dblclick', 'mousedown', 'mouseover', 'mouseout'];
 
 		L.DomUtil.addClass(icon, 'leaflet-clickable');
 		L.DomEvent.on(icon, 'click', this._onMouseClick, this);

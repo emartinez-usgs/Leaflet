@@ -28,26 +28,21 @@ L.Draggable = L.Class.extend({
 	enable: function () {
 		if (this._enabled) { return; }
 
-		for (var i = L.Draggable.START.length - 1; i >= 0; i--) {
-			L.DomEvent.on(this._dragStartTarget, L.Draggable.START[i], this._onDown, this);
-		}
-
+		L.DomEvent.on(this._dragStartTarget, L.Draggable.START, this._onDown, this);
 		this._enabled = true;
 	},
 
 	disable: function () {
 		if (!this._enabled) { return; }
 
-		for (var i = L.Draggable.START.length - 1; i >= 0; i--) {
-			L.DomEvent.off(this._dragStartTarget, L.Draggable.START[i], this._onDown, this);
-		}
-
+		L.DomEvent.off(this._dragStartTarget, L.Draggable.START, this._onDown);
 		this._enabled = false;
 		this._moved = false;
 	},
 
 	_onDown: function (e) {
-		this._moved = false;
+		if ((!L.Browser.touch && e.shiftKey) ||
+		    ((e.which !== 1) && (e.button !== 1) && !e.touches)) { return; }
 
 		L.DomEvent.preventDefault(e);
 		L.DomEvent.stopPropagation(e);
@@ -67,13 +62,14 @@ L.Draggable = L.Class.extend({
 		}
 
 		var first = (e.touches && e.touches.length === 1 ? e.touches[0] : e),
-			el = first.target;
+		    el = first.target;
 
 		// if touching a link, highlight it
 		if (L.Browser.touch && el.tagName.toLowerCase() === 'a') {
 			L.DomUtil.addClass(el, 'leaflet-active');
 		}
 
+		this._moved = false;
 		if (this._moving) { return; }
 
 		this._startPoint = new L.Point(first.clientX, first.clientY);
@@ -101,7 +97,7 @@ L.Draggable = L.Class.extend({
 
 		var first = (e.touches && e.touches.length === 1 ? e.touches[0] : e),
 		    newPoint = new L.Point(first.clientX, first.clientY),
-		    offset = newPoint.subtract(this._startPoint);
+		    diffVec = newPoint.subtract(this._startPoint);
 
 		if (!offset.x && !offset.y) { return; }
 
@@ -136,8 +132,8 @@ L.Draggable = L.Class.extend({
 		clearTimeout(this._longPressTimeout);
 		if (this._simulateClick && e.changedTouches) {
 			var first = e.changedTouches[0],
-				el = first.target,
-				dist = (this._newPos && this._newPos.distanceTo(this._startPos)) || 0;
+			    el = first.target,
+			    dist = (this._newPos && this._newPos.distanceTo(this._startPos)) || 0;
 
 			if (el.tagName.toLowerCase() === 'a') {
 				L.DomUtil.removeClass(el, 'leaflet-active');
@@ -179,6 +175,15 @@ L.Draggable = L.Class.extend({
 		L.DomUtil.removeClass(document.body, 'leaflet-dragging');
 	},
 
-		this._moving = false;
+	_simulateEvent: function (type, e) {
+		var simulatedEvent = document.createEvent('MouseEvents');
+
+		simulatedEvent.initMouseEvent(
+		        type, true, true, window, 1,
+		        e.screenX, e.screenY,
+		        e.clientX, e.clientY,
+		        false, false, false, false, 0, null);
+
+		e.target.dispatchEvent(simulatedEvent);
 	}
 });

@@ -10,7 +10,10 @@ L.Handler.MarkerDrag = L.Handler.extend({
 	addHooks: function () {
 		var icon = this._marker._icon;
 		if (!this._draggable) {
-			this._draggable = new L.Draggable(icon, icon);
+			this._draggable = new L.Draggable(icon, icon)
+			    .on('dragstart', this._onDragStart, this)
+			    .on('drag', this._onDrag, this)
+			    .on('dragend', this._onDragEnd, this);
 		}
 
 		this._draggable
@@ -40,14 +43,13 @@ L.Handler.MarkerDrag = L.Handler.extend({
 		    .closePopup()
 		    .fire('movestart')
 		    .fire('dragstart');
-		L.DomUtil.addClass(this._marker._icon, 'leaflet-marker-dragging');
 	},
 
 	_onDrag: function (e) {
 		var marker = this._marker,
-			shadow = marker._shadow,
-			iconPos = L.DomUtil.getPosition(marker._icon),
-			latlng = marker._map.layerPointToLatLng(iconPos);
+		    shadow = marker._shadow,
+		    iconPos = L.DomUtil.getPosition(marker._icon),
+		    latlng = marker._map.layerPointToLatLng(iconPos);
 
 		// update shadow position
 		if (shadow) {
@@ -57,14 +59,13 @@ L.Handler.MarkerDrag = L.Handler.extend({
 		marker._latlng = latlng;
 
 		marker
-			.fire('move', { latlng: latlng })
-			.fire('drag');
+		    .fire('move', {latlng: latlng})
+		    .fire('drag');
 	},
 
 	_onDragEnd: function () {
 		this._marker
 		    .fire('moveend')
 		    .fire('dragend');
-		L.DomUtil.removeClass(this._marker._icon, 'leaflet-marker-dragging');
 	}
 });

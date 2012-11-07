@@ -26,11 +26,11 @@ L.DomUtil = {
 	getViewportOffset: function (element) {
 
 		var top = 0,
-			left = 0,
-			el = element,
-			docBody = document.body,
-			pos,
-			ie7 = L.Browser.ie7;
+		    left = 0,
+		    el = element,
+		    docBody = document.body,
+		    pos,
+		    ie7 = L.Browser.ie7;
 
 		do {
 			top  += el.offsetTop  || 0;
@@ -77,14 +77,15 @@ L.DomUtil = {
 			top  -= el.scrollTop  || 0;
 			left -= el.scrollLeft || 0;
 
-			//Webkit (and ie <= 7) handles RTL scrollLeft different to everyone else
+			// webkit (and ie <= 7) handles RTL scrollLeft different to everyone else
 			// https://code.google.com/p/closure-library/source/browse/trunk/closure/goog/style/bidi.js
 			if (!L.DomUtil.documentIsLtr() && (L.Browser.webkit || ie7)) {
 				left += el.scrollWidth - el.clientWidth;
 
-				//ie7 shows the scrollbar by default and provides clientWidth counting it, so we need to add it back in if it is visible
-				// Scrollbar is on the left as we are RTL
-				if (ie7 && L.DomUtil.getStyle(el, 'overflow-y') !== 'hidden' && L.DomUtil.getStyle(el, 'overflow') !== 'hidden') {
+				// ie7 shows the scrollbar by default and provides clientWidth counting it, so we
+				// need to add it back in if it is visible; scrollbar is on the left as we are RTL
+				if (ie7 && L.DomUtil.getStyle(el, 'overflow-y') !== 'hidden' &&
+				           L.DomUtil.getStyle(el, 'overflow') !== 'hidden') {
 					left += 17;
 				}
 			}
@@ -130,7 +131,7 @@ L.DomUtil = {
 
 	hasClass: function (el, name) {
 		return (el.className.length > 0) &&
-		        new RegExp('(^|\\s)' + name + '(\\s|$)').test(el.className);
+		        new RegExp("(^|\\s)" + name + "(\\s|$)").test(el.className);
 	},
 
 	addClass: function (el, name) {
@@ -140,7 +141,15 @@ L.DomUtil = {
 	},
 
 	removeClass: function (el, name) {
-		el.className = L.Util.trim((' ' + el.className + ' ').replace(' ' + name + ' ', ' '));
+
+		function replaceFn(w, match) {
+			if (match === name) { return ''; }
+			return w;
+		}
+
+		el.className = el.className
+		        .replace(/(\S+)\s*/g, replaceFn)
+		        .replace(/(^\s+|\s+$)/, '');
 	},
 
 	setOpacity: function (el, value) {
@@ -238,44 +247,9 @@ L.DomUtil = {
 L.DomUtil.TRANSFORM = L.DomUtil.testProp(
         ['transform', 'WebkitTransform', 'OTransform', 'MozTransform', 'msTransform']);
 
-// webkitTransition comes first because some browser versions that drop vendor prefix don't do
-// the same for the transitionend event, in particular the Android 4.1 stock browser
-
 L.DomUtil.TRANSITION = L.DomUtil.testProp(
-        ['webkitTransition', 'transition', 'OTransition', 'MozTransition', 'msTransition']);
+        ['transition', 'webkitTransition', 'OTransition', 'MozTransition', 'msTransition']);
 
 L.DomUtil.TRANSITION_END =
         L.DomUtil.TRANSITION === 'webkitTransition' || L.DomUtil.TRANSITION === 'OTransition' ?
         L.DomUtil.TRANSITION + 'End' : 'transitionend';
-
-(function () {
-	var userSelectProperty = L.DomUtil.testProp(
-		['userSelect', 'WebkitUserSelect', 'OUserSelect', 'MozUserSelect', 'msUserSelect']);
-
-	L.extend(L.DomUtil, {
-		disableTextSelection: function () {
-			L.DomEvent.on(window, 'selectstart', L.DomEvent.preventDefault);
-			if (userSelectProperty) {
-				var style = document.documentElement.style;
-				this._userSelect = style[userSelectProperty];
-				style[userSelectProperty] = 'none';
-			}
-		},
-
-		enableTextSelection: function () {
-			L.DomEvent.off(window, 'selectstart', L.DomEvent.preventDefault);
-			if (userSelectProperty) {
-				document.documentElement.style[userSelectProperty] = this._userSelect;
-				delete this._userSelect;
-			}
-		},
-
-		disableImageDrag: function () {
-			L.DomEvent.on(window, 'dragstart', L.DomEvent.preventDefault);
-		},
-
-		enableImageDrag: function () {
-			L.DomEvent.off(window, 'dragstart', L.DomEvent.preventDefault);
-		}
-	});
-})();

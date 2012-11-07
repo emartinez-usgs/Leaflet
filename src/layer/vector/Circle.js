@@ -26,8 +26,8 @@ L.Circle = L.Path.extend({
 
 	projectLatlngs: function () {
 		var lngRadius = this._getLngRadius(),
-		    latlng = this._latlng,
-		    pointLeft = this._map.latLngToLayerPoint([latlng.lat, latlng.lng - lngRadius]);
+		    latlng2 = new L.LatLng(this._latlng.lat, this._latlng.lng - lngRadius, true),
+		    point2 = this._map.latLngToLayerPoint(latlng2);
 
 		this._point = this._map.latLngToLayerPoint(latlng);
 		this._radius = Math.max(this._point.x - pointLeft.x, 1);
@@ -35,10 +35,10 @@ L.Circle = L.Path.extend({
 
 	getBounds: function () {
 		var lngRadius = this._getLngRadius(),
-			latRadius = (this._mRadius / 40075017) * 360,
-			latlng = this._latlng,
-			sw = new L.LatLng(latlng.lat - latRadius, latlng.lng - lngRadius),
-			ne = new L.LatLng(latlng.lat + latRadius, latlng.lng + lngRadius);
+		    latRadius = (this._mRadius / 40075017) * 360,
+		    latlng = this._latlng,
+		    sw = new L.LatLng(latlng.lat - latRadius, latlng.lng - lngRadius),
+		    ne = new L.LatLng(latlng.lat + latRadius, latlng.lng + lngRadius);
 
 		return new L.LatLngBounds(sw, ne);
 	},
@@ -56,9 +56,9 @@ L.Circle = L.Path.extend({
 		}
 
 		if (L.Browser.svg) {
-			return 'M' + p.x + ',' + (p.y - r) +
-			       'A' + r + ',' + r + ',0,1,1,' +
-			       (p.x - 0.1) + ',' + (p.y - r) + ' z';
+			return "M" + p.x + "," + (p.y - r) +
+			       "A" + r + "," + r + ",0,1,1," +
+			       (p.x - 0.1) + "," + (p.y - r) + " z";
 		} else {
 			p._round();
 			r = Math.round(r);

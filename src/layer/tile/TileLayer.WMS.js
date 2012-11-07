@@ -52,13 +52,15 @@ L.TileLayer.WMS = L.TileLayer.extend({
 	getTileUrl: function (tilePoint) { // (Point, Number) -> String
 
 		var map = this._map,
+		    crs = map.options.crs,
 		    tileSize = this.options.tileSize,
 
 		    nwPoint = tilePoint.multiplyBy(tileSize),
-		    sePoint = nwPoint.add([tileSize, tileSize]),
+		    sePoint = nwPoint.add(new L.Point(tileSize, tileSize)),
 
-		    nw = this._crs.project(map.unproject(nwPoint, tilePoint.z)),
-		    se = this._crs.project(map.unproject(sePoint, tilePoint.z)),
+		    nw = crs.project(map.unproject(nwPoint, zoom)),
+		    se = crs.project(map.unproject(sePoint, zoom)),
+
 		    bbox = [nw.x, se.y, se.x, nw.y].join(','),
 
 		    url = L.Util.template(this._url, {s: this._getSubdomain(tilePoint)});

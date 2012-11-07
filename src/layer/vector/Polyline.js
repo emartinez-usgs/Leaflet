@@ -74,7 +74,15 @@ L.Polyline = L.Path.extend({
 	},
 
 	getBounds: function () {
-		return new L.LatLngBounds(this.getLatLngs());
+		var bounds = new L.LatLngBounds(),
+		    latLngs = this.getLatLngs(),
+		    i, len;
+
+		for (i = 0, len = latLngs.length; i < len; i++) {
+			bounds.extend(latLngs[i]);
+		}
+
+		return bounds;
 	},
 
 	_convertLatLngs: function (latlngs, overwrite) {

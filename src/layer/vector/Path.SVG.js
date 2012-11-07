@@ -130,9 +130,7 @@ L.Path = L.Path.extend({
 	},
 
 	_fireMouseEvent: function (e) {
-		if (!this.hasEventListeners(e.type)) {
-			return;
-		}
+		if (!this.hasEventListeners(e.type)) { return; }
 
 		var map = this._map,
 		    containerPoint = map.mouseEventToContainerPoint(e),
@@ -179,11 +177,11 @@ L.Map.include({
 
 	_animatePathZoom: function (opt) {
 		var scale = this.getZoomScale(opt.zoom),
-			offset = this._getCenterOffset(opt.center),
-			translate = offset.multiplyBy(-scale)._add(this._pathViewport.min);
+		    offset = this._getCenterOffset(opt.center),
+		    translate = offset.multiplyBy(-scale)._add(this._pathViewport.min);
 
 		this._pathRoot.style[L.DomUtil.TRANSFORM] =
-				L.DomUtil.getTranslateString(translate) + ' scale(' + scale + ') ';
+		        L.DomUtil.getTranslateString(translate) + ' scale(' + scale + ') ';
 
 		this._pathZooming = true;
 	},

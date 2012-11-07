@@ -124,16 +124,15 @@ L.Popup = L.Class.extend({
 		return events;
 	},
 
-	_close: function () {
-		if (this._map) {
-			this._map.closePopup(this);
+			map
+			    .removeLayer(this)
+			    .fire('popupclose', {popup: this});
 		}
 	},
 
 	_initLayout: function () {
 		var prefix = 'leaflet-popup',
-			containerClass = prefix + ' ' + this.options.className + ' leaflet-zoom-' +
-			        (this._animated ? 'animated' : 'hide'),
+			containerClass = prefix + ' ' + this.options.className + ' leaflet-zoom-animated',
 			container = this._container = L.DomUtil.create('div', containerClass),
 			closeButton;
 
@@ -221,8 +220,8 @@ L.Popup = L.Class.extend({
 		if (!this._map) { return; }
 
 		var pos = this._map.latLngToLayerPoint(this._latlng),
-		    animated = this._animated,
-		    offset = L.point(this.options.offset);
+		    is3d = L.Browser.any3d,
+		    offset = this.options.offset;
 
 		if (animated) {
 			L.DomUtil.setPosition(this._container, pos);
@@ -256,7 +255,7 @@ L.Popup = L.Class.extend({
 		}
 
 		var containerPos = map.layerPointToContainerPoint(layerPos),
-		    padding = L.point(this.options.autoPanPadding),
+		    padding = this.options.autoPanPadding,
 		    size = map.getSize(),
 		    dx = 0,
 		    dy = 0;

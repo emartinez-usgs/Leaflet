@@ -128,7 +128,10 @@ L.LatLngBounds.prototype = {
 	},
 
 	toBBoxString: function () {
-		return [this.getWest(), this.getSouth(), this.getEast(), this.getNorth()].join(',');
+		var sw = this._southWest,
+		    ne = this._northEast;
+
+		return [sw.lng, sw.lat, ne.lng, ne.lat].join(',');
 	},
 
 	equals: function (bounds) { // (LatLngBounds)

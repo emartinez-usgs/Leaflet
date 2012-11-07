@@ -32,9 +32,9 @@ L.Marker.include({
 
 		if (!this._popup) {
 			this
-				.on('click', this.openPopup, this)
-				.on('remove', this.closePopup, this)
-				.on('move', this._movePopup, this);
+			    .on('click', this.openPopup, this)
+			    .on('remove', this.closePopup, this)
+			    .on('move', this._movePopup, this);
 		}
 
 		if (content instanceof L.Popup) {
@@ -59,9 +59,9 @@ L.Marker.include({
 		if (this._popup) {
 			this._popup = null;
 			this
-				.off('click', this.openPopup)
-				.off('remove', this.closePopup)
-				.off('move', this._movePopup);
+			    .off('click', this.openPopup)
+			    .off('remove', this.closePopup)
+			    .off('move', this._movePopup);
 		}
 		return this;
 	},
