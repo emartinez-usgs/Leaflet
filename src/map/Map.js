@@ -234,9 +234,8 @@ L.Map = L.Class.extend({
 	},
 
 	hasLayer: function (layer) {
-		if (!layer) { return false; }
-
-		return (L.stamp(layer) in this._layers);
+		var id = L.stamp(layer);
+		return this._layers.hasOwnProperty(id);
 	},
 
 	eachLayer: function (method, context) {
@@ -716,22 +715,9 @@ L.Map = L.Class.extend({
 
 	_onTileLayerLoad: function () {
 		this._tileLayersToLoad--;
-		if (this._tileLayersNum && !this._tileLayersToLoad) {
-			this.fire('tilelayersload');
-		}
-	},
-
-	_clearHandlers: function () {
-		for (var i = 0, len = this._handlers.length; i < len; i++) {
-			this._handlers[i].disable();
-		}
-	},
-
-	whenReady: function (callback, context) {
-		if (this._loaded) {
-			callback.call(context || this, this);
-		} else {
-			this.on('load', callback, context);
+		if (this._tileLayersNum && !this._tileLayersToLoad && this._tileBg) {
+			clearTimeout(this._clearTileBgTimer);
+			this._clearTileBgTimer = setTimeout(L.bind(this._clearTileBg, this), 500);
 		}
 		return this;
 	},

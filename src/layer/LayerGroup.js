@@ -17,7 +17,7 @@ L.LayerGroup = L.Class.extend({
 	},
 
 	addLayer: function (layer) {
-		var id = this.getLayerId(layer);
+		var id = L.stamp(layer);
 
 		this._layers[id] = layer;
 
@@ -29,7 +29,7 @@ L.LayerGroup = L.Class.extend({
 	},
 
 	removeLayer: function (layer) {
-		var id = layer in this._layers ? layer : this.getLayerId(layer);
+		var id = L.stamp(layer);
 
 		if (this._map && this._layers[id]) {
 			this._map.removeLayer(this._layers[id]);

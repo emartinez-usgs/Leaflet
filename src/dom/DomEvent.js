@@ -6,7 +6,7 @@ L.DomEvent = {
 	/* inspired by John Resig, Dean Edwards and YUI addEvent implementations */
 	addListener: function (obj, type, fn, context) { // (HTMLElement, String, Function[, Object])
 
-		var id = L.Util.stamp(fn),
+		var id = L.stamp(fn),
 		    key = '_leaflet_' + type + id,
 		    handler, originalHandler, newType;
 
@@ -61,7 +61,7 @@ L.DomEvent = {
 
 	removeListener: function (obj, type, fn) {  // (HTMLElement, String, Function)
 
-		var id = L.Util.stamp(fn),
+		var id = L.stamp(fn),
 		    key = '_leaflet_' + type + id,
 		    handler = obj[key];
 

@@ -477,6 +477,8 @@ L.TileLayer = L.Class.extend({
 	// image-specific code (override to implement e.g. Canvas or SVG tile layer)
 
 	getTileUrl: function (tilePoint) {
+		this._adjustTilePoint(tilePoint);
+
 		return L.Util.template(this._url, L.extend({
 			s: this._getSubdomain(tilePoint),
 			z: tilePoint.z,

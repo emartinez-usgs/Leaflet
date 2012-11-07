@@ -111,22 +111,10 @@ L.Mixin.Events = {
 			return this;
 		}
 
-		var event = L.Util.extend({}, data, { type: type, target: this });
-
-		var events = this[eventsKey],
-		    listeners, i, len, typeIndex, contextId;
-
-		if (events[type]) {
-			// make sure adding/removing listeners inside other listeners won't cause infinite loop
-			listeners = events[type].slice();
-
-			for (i = 0, len = listeners.length; i < len; i++) {
-				listeners[i].action.call(listeners[i].context || this, event);
-			}
-		}
-
-		// fire event for the context-indexed listeners as well
-		typeIndex = events[type + '_idx'];
+		var event = L.extend({
+			type: type,
+			target: this
+		}, data);
 
 		for (contextId in typeIndex) {
 			listeners = typeIndex[contextId].slice();

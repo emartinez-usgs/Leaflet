@@ -23,8 +23,8 @@ L.PosAnimation = L.Class.extend({
 		// toggle reflow, Chrome flickers for some reason if you don't do this
 		L.Util.falseFn(el.offsetWidth);
 
-		// there's no native way to track value updates of transitioned properties, so we imitate this
-		this._stepTimer = setInterval(L.bind(this._onStep, this), 50);
+		// there's no native way to track value updates of tranisitioned properties, so we imitate this
+		this._stepTimer = setInterval(L.bind(this.fire, this, 'step'), 50);
 	},
 
 	stop: function () {

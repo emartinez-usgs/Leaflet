@@ -11,7 +11,7 @@ L.FeatureGroup = L.LayerGroup.extend({
 	},
 
 	addLayer: function (layer) {
-		if (this.hasLayer(layer)) {
+		if (this._layers[L.stamp(layer)]) {
 			return this;
 		}
 

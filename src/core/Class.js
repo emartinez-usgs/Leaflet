@@ -57,28 +57,6 @@ L.Class.extend = function (props) {
 	// mix given properties into the prototype
 	L.extend(proto, props);
 
-	proto._initHooks = [];
-
-	var parent = this;
-	// jshint camelcase: false
-	NewClass.__super__ = parent.prototype;
-
-	// add method for calling all hooks
-	proto.callInitHooks = function () {
-
-		if (this._initHooksCalled) { return; }
-
-		if (parent.prototype.callInitHooks) {
-			parent.prototype.callInitHooks.call(this);
-		}
-
-		this._initHooksCalled = true;
-
-		for (var i = 0, len = proto._initHooks.length; i < len; i++) {
-			proto._initHooks[i].call(this);
-		}
-	};
-
 	return NewClass;
 };
 
@@ -91,16 +69,4 @@ L.Class.include = function (props) {
 // merge new default options to the Class
 L.Class.mergeOptions = function (options) {
 	L.extend(this.prototype.options, options);
-};
-
-// add a constructor hook
-L.Class.addInitHook = function (fn) { // (Function) || (String, args...)
-	var args = Array.prototype.slice.call(arguments, 1);
-
-	var init = typeof fn === 'function' ? fn : function () {
-		this[fn].apply(this, args);
-	};
-
-	this.prototype._initHooks = this.prototype._initHooks || [];
-	this.prototype._initHooks.push(init);
 };
