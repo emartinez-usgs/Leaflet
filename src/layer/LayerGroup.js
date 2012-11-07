@@ -25,8 +25,6 @@ L.LayerGroup = L.Class.extend({
 			this._map.addLayer(layer);
 		}
 
-		this.fire('layeradd', { layer: layer });
-
 		return this;
 	},
 
@@ -36,8 +34,6 @@ L.LayerGroup = L.Class.extend({
 		if (this._map && this._layers[id]) {
 			this._map.removeLayer(this._layers[id]);
 		}
-
-		this.fire('layerremove', { layer: layer });
 
 		return this;
 	},
