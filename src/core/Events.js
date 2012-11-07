@@ -9,15 +9,20 @@ L.Mixin = {};
 L.Mixin.Events = {
 
 	addEventListener: function (types, fn, context) { // (String, Function[, Object]) or (Object[, Object])
+		var events = this[key] = this[key] || {},
+			type, i, len;
 
-		// types can be a map of types/handlers
-		if (L.Util.invokeEach(types, this.addEventListener, this, fn, context)) { return this; }
+		// Types can be a map of types/handlers
+		if (typeof types === 'object') {
+			for (type in types) {
+				if (types.hasOwnProperty(type)) {
+					this.addEventListener(type, types[type], fn);
+				}
+			}
 
-		var events = this[eventsKey] = this[eventsKey] || {},
-		    contextId = context && L.stamp(context),
-		    i, len, event, type, indexKey, indexLenKey, typeIndex;
+			return this;
+		}
 
-		// types can be a string of space-separated words
 		types = L.Util.splitWords(types);
 
 		for (i = 0, len = types.length; i < len; i++) {
@@ -61,21 +66,19 @@ L.Mixin.Events = {
 		                    (type + '_idx' in events && events[type + '_idx_len'] > 0));
 	},
 
-	removeEventListener: function (types, fn, context) { // ([String, Function, Object]) or (Object[, Object])
+	removeEventListener: function (types, fn, context) { // (String[, Function, Object]) or (Object[, Object])
+		var events = this[key],
+			type, i, len, listeners, j;
 
-		if (!this[eventsKey]) {
+		if (typeof types === 'object') {
+			for (type in types) {
+				if (types.hasOwnProperty(type)) {
+					this.removeEventListener(type, types[type], fn);
+				}
+			}
+
 			return this;
 		}
-
-		if (!types) {
-			return this.clearAllEventListeners();
-		}
-
-		if (L.Util.invokeEach(types, this.removeEventListener, this, fn, context)) { return this; }
-
-		var events = this[eventsKey],
-		    contextId = context && L.stamp(context),
-		    i, len, type, listeners, j, indexKey, indexLenKey, typeIndex, removed;
 
 		types = L.Util.splitWords(types);
 
@@ -86,37 +89,20 @@ L.Mixin.Events = {
 
 			typeIndex = events[indexKey];
 
-			if (!fn) {
-				// clear all listeners for a type if function isn't specified
-				delete events[type];
-				delete events[indexKey];
+			if (this.hasEventListeners(types[i])) {
+				listeners = events[types[i]];
 
-			} else {
-				listeners = context && typeIndex ? typeIndex[contextId] : events[type];
-
-				if (listeners) {
-					for (j = listeners.length - 1; j >= 0; j--) {
-						if ((listeners[j].action === fn) && (!context || (listeners[j].context === context))) {
-							removed = listeners.splice(j, 1);
-							// set the old action to a no-op, because it is possible
-							// that the listener is being iterated over as part of a dispatch
-							removed[0].action = L.Util.falseFn;
-						}
-					}
-
-					if (context && typeIndex && (listeners.length === 0)) {
-						delete typeIndex[contextId];
-						events[indexLenKey]--;
+				for (j = listeners.length - 1; j >= 0; j--) {
+					if (
+						(!fn || listeners[j].action === fn) &&
+						(!context || (listeners[j].context === context))
+					) {
+						listeners.splice(j, 1);
 					}
 				}
 			}
 		}
 
-		return this;
-	},
-
-	clearAllEventListeners: function () {
-		delete this[eventsKey];
 		return this;
 	},
 

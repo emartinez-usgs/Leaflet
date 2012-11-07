@@ -74,18 +74,18 @@ L.Control.Layers = L.Control.extend({
 		var form = this._form = L.DomUtil.create('form', className + '-list');
 
 		if (this.options.collapsed) {
-			if (!L.Browser.android) {
-				L.DomEvent
-				    .on(container, 'mouseover', this._expand, this)
-				    .on(container, 'mouseout', this._collapse, this);
-			}
+			L.DomEvent
+			    .on(container, 'mouseover', this._expand, this)
+			    .on(container, 'mouseout', this._collapse, this);
+
 			var link = this._layersLink = L.DomUtil.create('a', className + '-toggle', container);
 			link.href = '#';
 			link.title = 'Layers';
 
 			if (L.Browser.touch) {
 				L.DomEvent
-				    .on(link, 'click', L.DomEvent.stop)
+				    .on(link, 'click', L.DomEvent.stopPropagation)
+				    .on(link, 'click', L.DomEvent.preventDefault)
 				    .on(link, 'click', this._expand, this);
 			}
 			else {
@@ -129,14 +129,15 @@ L.Control.Layers = L.Control.extend({
 		this._overlaysList.innerHTML = '';
 
 		var baseLayersPresent = false,
-		    overlaysPresent = false,
-		    i, obj;
+		    overlaysPresent = false;
 
-		for (i in this._layers) {
-			obj = this._layers[i];
-			this._addItem(obj);
-			overlaysPresent = overlaysPresent || obj.overlay;
-			baseLayersPresent = baseLayersPresent || !obj.overlay;
+		for (var i in this._layers) {
+			if (this._layers.hasOwnProperty(i)) {
+				var obj = this._layers[i];
+				this._addItem(obj);
+				overlaysPresent = overlaysPresent || obj.overlay;
+				baseLayersPresent = baseLayersPresent || !obj.overlay;
+			}
 		}
 
 		this._separator.style.display = overlaysPresent && baseLayersPresent ? '' : 'none';
@@ -207,9 +208,9 @@ L.Control.Layers = L.Control.extend({
 
 	_onInputClick: function () {
 		var i, input, obj,
-			inputs = this._form.getElementsByTagName('input'),
-			inputsLen = inputs.length,
-			baseLayer;
+		    inputs = this._form.getElementsByTagName('input'),
+		    inputsLen = inputs.length,
+		    baseLayer;
 
 		for (i = 0; i < inputsLen; i++) {
 			input = inputs[i];
