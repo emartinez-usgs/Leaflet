@@ -377,8 +377,12 @@ L.Map = L.Class.extend({
 
 		do {
 			zoom++;
-			boundsSize = this.project(se, zoom).subtract(this.project(nw, zoom)).add(padding);
-			zoomNotFound = !inside ? size.contains(boundsSize) : boundsSize.x < size.x || boundsSize.y < size.y;
+			nePoint = this.project(ne, zoom);
+			swPoint = this.project(sw, zoom);
+
+			boundsSize = new L.Point(
+			        Math.abs(nePoint.x - swPoint.x),
+			        Math.abs(swPoint.y - nePoint.y));
 
 		} while (zoomNotFound && zoom <= maxZoom);
 

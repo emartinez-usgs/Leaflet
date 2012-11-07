@@ -39,7 +39,7 @@ L.Map.ScrollWheelZoom = L.Handler.extend({
 
 	_performZoom: function () {
 		var map = this._map,
-		    delta = this._delta,
+		    delta = Math.round(this._delta),
 		    zoom = map.getZoom();
 
 		delta = delta > 0 ? Math.ceil(delta) : Math.floor(delta);
@@ -51,11 +51,20 @@ L.Map.ScrollWheelZoom = L.Handler.extend({
 
 		if (!delta) { return; }
 
-		if (map.options.scrollWheelZoom === 'center') {
-			map.setZoom(zoom + delta);
-		} else {
-			map.setZoomAround(this._lastMousePos, zoom + delta);
-		}
+		var newZoom = zoom + delta,
+		    newCenter = this._getCenterForScrollWheelZoom(newZoom);
+
+		map.setView(newCenter, newZoom);
+	},
+
+	_getCenterForScrollWheelZoom: function (newZoom) {
+		var map = this._map,
+		    scale = map.getZoomScale(newZoom),
+		    viewHalf = map.getSize()._divideBy(2),
+		    centerOffset = this._lastMousePos._subtract(viewHalf)._multiplyBy(1 - 1 / scale),
+		    newCenterPoint = map._getTopLeftPoint()._add(viewHalf)._add(centerOffset);
+
+		return map.unproject(newCenterPoint);
 	}
 });
 

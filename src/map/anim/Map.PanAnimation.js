@@ -21,10 +21,9 @@ L.Map.include({
 				options.pan = L.extend({animate: options.animate}, options.pan);
 			}
 
-			// try animating pan or zoom
-			var animated = (this._zoom !== zoom) ?
-				this._tryAnimatedZoom && this._tryAnimatedZoom(center, zoom, options.zoom) :
-				this._tryAnimatedPan(center, options.pan);
+			var done = (zoomChanged ?
+			        this._zoomToIfClose && this._zoomToIfClose(center, zoom) :
+			        this._panByIfClose(center));
 
 			if (animated) {
 				// prevent resize handler call, the view will refresh after animation anyway
@@ -91,8 +90,11 @@ L.Map.include({
 		// don't animate too far unless animate: true specified in options
 		if ((options && options.animate) !== true && !this.getSize().contains(offset)) { return false; }
 
-		this.panBy(offset, options);
+	_offsetIsWithinView: function (offset, multiplyFactor) {
+		var m = multiplyFactor || 1,
+		    size = this.getSize();
 
-		return true;
+		return (Math.abs(offset.x) <= size.x * m) &&
+		       (Math.abs(offset.y) <= size.y * m);
 	}
 });

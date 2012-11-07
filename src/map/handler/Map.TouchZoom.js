@@ -61,7 +61,8 @@ L.Map.TouchZoom = L.Handler.extend({
 
 			map
 			    .fire('movestart')
-			    .fire('zoomstart');
+			    .fire('zoomstart')
+			    ._prepareTileBg();
 
 			this._moved = true;
 		}
@@ -76,10 +77,19 @@ L.Map.TouchZoom = L.Handler.extend({
 	_updateOnMove: function () {
 		var map = this._map,
 		    origin = this._getScaleOrigin(),
-		    center = map.layerPointToLatLng(origin),
-		    zoom = map.getScaleZoom(this._scale);
+		    center = map.layerPointToLatLng(origin);
 
-		map._animateZoom(center, zoom, this._startCenter, this._scale, this._delta);
+		map.fire('zoomanim', {
+			center: center,
+			zoom: map.getScaleZoom(this._scale)
+		});
+
+		// Used 2 translates instead of transform-origin because of a very strange bug -
+		// it didn't count the origin on the first touch-zoom but worked correctly afterwards
+
+		map._tileBg.style[L.DomUtil.TRANSFORM] =
+		        L.DomUtil.getTranslateString(this._delta) + ' ' +
+		        L.DomUtil.getScaleString(this._scale, this._startCenter);
 	},
 
 	_onTouchEnd: function () {
@@ -105,6 +115,8 @@ L.Map.TouchZoom = L.Handler.extend({
 		    floatZoomDelta = map.getScaleZoom(this._scale) - oldZoom,
 		    roundZoomDelta = (floatZoomDelta > 0 ?
 		            Math.ceil(floatZoomDelta) : Math.floor(floatZoomDelta)),
+
+		    zoom = map._limitZoom(oldZoom + roundZoomDelta);
 
 		    zoom = map._limitZoom(oldZoom + roundZoomDelta),
 		    scale = map.getZoomScale(zoom) / this._scale;

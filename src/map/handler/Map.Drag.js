@@ -20,9 +20,9 @@ L.Map.mergeOptions({
 L.Map.Drag = L.Handler.extend({
 	addHooks: function () {
 		if (!this._draggable) {
-			var options = this._map.options;
+			var map = this._map;
 
-			this._draggable = new L.Draggable(this._map._mapPane, this._map._container, options.longPress);
+			this._draggable = new L.Draggable(map._mapPane, map._container, map.options.longPress);
 
 			this._draggable.on({
 				'dragstart': this._onDragStart,
@@ -30,11 +30,9 @@ L.Map.Drag = L.Handler.extend({
 				'dragend': this._onDragEnd
 			}, this);
 
-			if (options.worldCopyJump) {
+			if (map.options.worldCopyJump) {
 				this._draggable.on('predrag', this._onPreDrag, this);
 				map.on('viewreset', this._onViewReset, this);
-
-				this._onViewReset();
 			}
 		}
 		this._draggable.enable();
@@ -87,7 +85,7 @@ L.Map.Drag = L.Handler.extend({
 	_onViewReset: function () {
 		// TODO fix hardcoded Earth values
 		var pxCenter = this._map.getSize()._divideBy(2),
-		    pxWorldCenter = this._map.latLngToLayerPoint([0, 0]);
+		    pxWorldCenter = this._map.latLngToLayerPoint(new L.LatLng(0, 0));
 
 		this._initialWorldOffset = pxWorldCenter.subtract(pxCenter).x;
 		this._worldWidth = this._map.project([0, 180]).x;
@@ -95,7 +93,8 @@ L.Map.Drag = L.Handler.extend({
 
 	_onPreDrag: function () {
 		// TODO refactor to be able to adjust map pane position after zoom
-		var worldWidth = this._worldWidth,
+		var map = this._map,
+		    worldWidth = this._worldWidth,
 		    halfWidth = Math.round(worldWidth / 2),
 		    dx = this._initialWorldOffset,
 		    x = this._draggable._newPos.x,
@@ -111,9 +110,9 @@ L.Map.Drag = L.Handler.extend({
 		    options = map.options,
 		    delay = +new Date() - this._lastTime,
 
-		    noInertia = !options.inertia || delay > options.inertiaThreshold || !this._positions[0];
-
-		map.fire('dragend');
+		    noInertia = !options.inertia ||
+		            delay > options.inertiaThreshold ||
+		            !this._positions[0];
 
 		if (noInertia) {
 			map.fire('moveend');
@@ -122,16 +121,20 @@ L.Map.Drag = L.Handler.extend({
 
 			var direction = this._lastPos.subtract(this._positions[0]),
 			    duration = (this._lastTime + delay - this._times[0]) / 1000,
-			    ease = options.easeLinearity,
 
-			    speedVector = direction.multiplyBy(ease / duration),
-			    speed = speedVector.distanceTo([0, 0]),
+			    speedVector = direction.multiplyBy(0.58 / duration),
+			    speed = speedVector.distanceTo(new L.Point(0, 0)),
 
 			    limitedSpeed = Math.min(options.inertiaMaxSpeed, speed),
 			    limitedSpeedVector = speedVector.multiplyBy(limitedSpeed / speed),
 
-			    decelerationDuration = limitedSpeed / (options.inertiaDeceleration * ease),
+			    decelerationDuration = limitedSpeed / options.inertiaDeceleration,
 			    offset = limitedSpeedVector.multiplyBy(-decelerationDuration / 2).round();
+
+			L.Util.requestAnimFrame(function () {
+				map.panBy(offset, decelerationDuration);
+			});
+		}
 
 			if (!offset.x || !offset.y) {
 				map.fire('moveend');

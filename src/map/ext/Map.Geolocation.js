@@ -49,8 +49,8 @@ L.Map.include({
 	_handleGeolocationError: function (error) {
 		var c = error.code,
 		    message = error.message ||
-		            (c === 1 ? 'permission denied' :
-		            (c === 2 ? 'position unavailable' : 'timeout'));
+		            (c === 1 ? "permission denied" :
+		            (c === 2 ? "position unavailable" : "timeout"));
 
 		if (this._locateOptions.setView && !this._loaded) {
 			this.fitWorld();
@@ -63,18 +63,18 @@ L.Map.include({
 	},
 
 	_handleGeolocationResponse: function (pos) {
-		var lat = pos.coords.latitude,
+		var latAccuracy = 180 * pos.coords.accuracy / 4e7,
+		    lngAccuracy = latAccuracy * 2,
+
+		    lat = pos.coords.latitude,
 		    lng = pos.coords.longitude,
 		    latlng = new L.LatLng(lat, lng),
 
-		    latAccuracy = 180 * pos.coords.accuracy / 40075017,
-		    lngAccuracy = latAccuracy / Math.cos(L.LatLng.DEG_TO_RAD * lat),
+		    sw = new L.LatLng(lat - latAccuracy, lng - lngAccuracy),
+		    ne = new L.LatLng(lat + latAccuracy, lng + lngAccuracy),
+		    bounds = new L.LatLngBounds(sw, ne),
 
-		    bounds = L.latLngBounds(
-		            [lat - latAccuracy, lng - lngAccuracy],
-		            [lat + latAccuracy, lng + lngAccuracy]),
-
-		    options = this._locateOptions;
+		    options = this._locationOptions;
 
 		if (options.setView) {
 			var zoom = Math.min(this.getBoundsZoom(bounds), options.maxZoom);
