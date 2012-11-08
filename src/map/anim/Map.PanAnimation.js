@@ -16,9 +16,9 @@ L.Map.include({
 
 		if (this._loaded && !options.reset && options !== true) {
 
-			if (options.animate !== undefined) {
-				options.zoom = L.extend({animate: options.animate}, options.zoom);
-				options.pan = L.extend({animate: options.animate}, options.pan);
+			if (this._panAnim) {
+				this._panAnim.stop();
+				L.Util.falseFn(this._container.offsetWidth); // force reflow
 			}
 
 			var done = (zoomChanged ?
