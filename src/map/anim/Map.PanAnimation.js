@@ -38,9 +38,8 @@ L.Map.include({
 		return this;
 	},
 
-	panBy: function (offset, options) {
-		offset = L.point(offset).round();
-		options = options || {};
+	panBy: function (offset, duration, easeLinearity) {
+		offset = L.point(offset);
 
 		if (!offset.x && !offset.y) {
 			return this;
@@ -64,12 +63,8 @@ L.Map.include({
 		if (options.animate !== false) {
 			L.DomUtil.addClass(this._mapPane, 'leaflet-pan-anim');
 
-			var newPos = this._getMapPanePos().subtract(offset);
-			this._panAnim.run(this._mapPane, newPos, options.duration || 0.25, options.easeLinearity);
-		} else {
-			this._rawPanBy(offset);
-			this.fire('move').fire('moveend');
-		}
+		var newPos = L.DomUtil.getPosition(this._mapPane).subtract(offset);
+		this._panAnim.run(this._mapPane, newPos, duration || 0.25, easeLinearity);
 
 		return this;
 	},
