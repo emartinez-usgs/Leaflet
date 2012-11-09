@@ -9,11 +9,45 @@ describe('LatLng', function() {
 			expect(b.lat).to.eql(-25);
 			expect(b.lng).to.eql(-74);
 		});
+		
+		it("should clamp longitude to lie between -180 and 180", function() {
+			var a = new L.LatLng(0, 190).lng;
+			expect(a).toEqual(-170);
 
-		it('throws an error if invalid lat or lng', function () {
-			expect(function () {
-				var a = new L.LatLng(NaN, NaN);
-			}).to.throwError();
+			var b = new L.LatLng(0, 360).lng;
+			expect(b).toEqual(0);
+			
+			var c = new L.LatLng(0, 380).lng;
+			expect(c).toEqual(20);
+	
+			var d = new L.LatLng(0, -190).lng;
+			expect(d).toEqual(170);
+	
+			var e = new L.LatLng(0, -360).lng;
+			expect(e).toEqual(0);
+	
+			var f = new L.LatLng(0, -380).lng;
+			expect(f).toEqual(-20);
+
+			var g = new L.LatLng(0, 90).lng;
+			expect(g).toEqual(90);
+
+			var h = new L.LatLng(0, 180).lng;
+			expect(h).toEqual(180);
+	 });
+		
+		it("should not clamp latitude and longitude if unbounded flag set to true", function() {
+			var a = new L.LatLng(150, 0, true).lat;
+			expect(a).toEqual(150);
+			
+			var b = new L.LatLng(-230, 0, true).lat;
+			expect(b).toEqual(-230);
+	
+			var c = new L.LatLng(0, 250, true).lng;
+			expect(c).toEqual(250);
+	
+			var d = new L.LatLng(0, -190, true).lng;
+			expect(d).toEqual(-190);
 		});
 	});
 

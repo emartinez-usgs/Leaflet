@@ -63,9 +63,9 @@ describe('DomEvent', function() {
 	});
 
 	describe('#removeListener', function() {
-		it('removes a previously added listener', function() {
-			var listener = sinon.spy();
-
+		it('should remove previously added listener', function() {
+			var listener = jasmine.createSpy('listener');
+			
 			L.DomEvent.addListener(el, 'click', listener);
 			L.DomEvent.removeListener(el, 'click', listener);
 

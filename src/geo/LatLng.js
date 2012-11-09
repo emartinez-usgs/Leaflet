@@ -1,6 +1,6 @@
 /*
- * L.LatLng represents a geographical point with latitude and longitude coordinates.
- */
+	CM.LatLng represents a geographical point with latitude and longitude coordinates.
+*/
 
 L.LatLng = function (rawLat, rawLng) { // (Number, Number)
 	var lat = parseFloat(rawLat),
@@ -8,6 +8,11 @@ L.LatLng = function (rawLat, rawLng) { // (Number, Number)
 
 	if (isNaN(lat) || isNaN(lng)) {
 		throw new Error('Invalid LatLng object: (' + rawLat + ', ' + rawLng + ')');
+	}
+
+	if (noWrap !== true) {
+		lat = Math.max(Math.min(lat, 90), -90);					// clamp latitude into -90..90
+		lng = (lng + 180) % 360 + ((lng < -180 || lng === 180) ? 180 : -180);	// wrap longitude into -180..180
 	}
 
 	this.lat = lat;
