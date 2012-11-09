@@ -35,20 +35,7 @@ L.PosAnimation = L.Class.extend({
 
 		L.DomUtil.setPosition(this._el, this._getPos());
 		this._onTransitionEnd();
-		L.Util.falseFn(this._el.offsetWidth); // force reflow in case we are about to start a new animation
-	},
-
-	_onStep: function () {
-		var stepPos = this._getPos();
-		if (!stepPos) {
-			this._onTransitionEnd();
-			return;
-		}
-		// jshint camelcase: false
-		// make L.DomUtil.getPosition return intermediate position value during animation
-		this._el._leaflet_pos = stepPos;
-
-		this.fire('step');
+		L.Util.falseFn(this._container.offsetWidth); // force reflow in case we are about to start a new animation
 	},
 
 	// you can't easily get intermediate values of properties animated with CSS3 Transitions,
