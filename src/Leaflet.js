@@ -13,11 +13,4 @@ if (typeof module === 'object' && typeof module.exports === 'object') {
 	define(L);
 }
 
-// define Leaflet as a global L variable, saving the original L to restore later if needed
-
-L.noConflict = function () {
-	window.L = oldL;
-	return this;
-};
-
-window.L = L;
+L.version = '0.5';
