@@ -107,8 +107,12 @@ L.DomEvent = {
 	disableClickPropagation: function (el) {
 		var stop = L.DomEvent.stopPropagation;
 
+		for (var i = L.Draggable.START.length - 1; i >= 0; i--) {
+			L.DomEvent.addListener(el, L.Draggable.START[i], stop);
+		}
+
 		return L.DomEvent
-			.addListener(el, 'click', L.DomEvent._fakeStop)
+			.addListener(el, 'click', stop)
 			.addListener(el, 'dblclick', stop);
 	},
 
