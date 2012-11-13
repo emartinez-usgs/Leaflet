@@ -13,12 +13,8 @@ L.Control.Zoom = L.Control.extend({
 
 		this._map = map;
 
-		this._zoomInButton  = this._createButton(
-		        '+', 'Zoom in',  zoomName + '-in',  container, this._zoomIn,  this);
-		this._zoomOutButton = this._createButton(
-		        '-', 'Zoom out', zoomName + '-out', container, this._zoomOut, this);
-
-		map.on('zoomend zoomlevelschange', this._updateDisabled, this);
+		this._createButton('+', 'Zoom in', className + '-in', container, this._zoomIn, this);
+		this._createButton('-', 'Zoom out', className + '-out', container, this._zoomOut, this);
 
 		return container;
 	},
