@@ -34,6 +34,7 @@ An in-progress version being developed on the `master` branch.
  * Added `Path` `remove` event.
  * Added `Marker` `riseOnHover` and `riseOffset` options (for bringing markers to front on hover, disabled by default) (by [jacobtoye](https://github.com/jacobtoye)). [#914](https://github.com/CloudMade/Leaflet/pull/914) [#920](https://github.com/CloudMade/Leaflet/issues/920)
  * Added `Marker` `move` and `remove` events.
+ * Added `Marker` `contextmenu` event. [#223](https://github.com/CloudMade/Leaflet/issues/223)
  * Added `Map` `whenReady` method (by [@jfirebaugh](https://github.com/jfirebaugh)). [#1063](https://github.com/CloudMade/Leaflet/pull/1063)
  * Added `FeatureGroup` `layeradd` and `layerremove` events (by [@jacobtoye](https://github.com/jacobtoye)). [#1122](https://github.com/CloudMade/Leaflet/issues/1122)
  * Added `Control.Layers` `baselayerchange` event (by [@jfirebaugh](https://github.com/jfirebaugh)). [#1064](https://github.com/CloudMade/Leaflet/pull/1064)
@@ -41,6 +42,7 @@ An in-progress version being developed on the `master` branch.
  * Removed `Browser` `ua`, `ie`, `gecko`, `opera` properties (no longer needed).
  * Added `CRS.Simple` to the list of built-in CRS. It was added earlier but not included in the build.
  * Added `L.extend`, `L.bind`, `L.stamp`, `L.setOptions` shortcuts for corresponding `L.Util` methods.
+ * Added `Point` `equals` method.
 
 ### Bugfixes
 
