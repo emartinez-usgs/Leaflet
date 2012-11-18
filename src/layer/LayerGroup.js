@@ -96,15 +96,15 @@ L.LayerGroup = L.Class.extend({
 		for (var i in this._layers) {
 			layers.push(this._layers[i]);
 		}
-		return layers;
 	},
 
-	setZIndex: function (zIndex) {
-		return this.invoke('setZIndex', zIndex);
-	},
-
-	getLayerId: function (layer) {
-		return L.stamp(layer);
+	setZIndex: function(zIndex)
+	{
+		this.eachLayer(function(l) {
+			if (l.setZIndex) {
+				l.setZIndex(zIndex);
+			}
+		}, this);
 	}
 });
 
