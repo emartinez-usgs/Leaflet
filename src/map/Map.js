@@ -183,9 +183,12 @@ L.Map = L.Class.extend({
 		this._layers[id] = layer;
 
 		// TODO getMaxZoom, getMinZoom in ILayer (instead of options)
-		if (layer.options && (!isNaN(layer.options.maxZoom) || !isNaN(layer.options.minZoom))) {
+		if(layer.options && (!isNaN(layer.options.maxZoom) || !isNaN(layer.options.minZoom))){
 			this._zoomBoundLayers[id] = layer;
 			this._updateZoomLevels();
+			if(this._loaded){
+				this.setZoom(this.getZoom());
+			}
 		}
 
 		// TODO looks ugly, refactor!!!
@@ -213,6 +216,10 @@ L.Map = L.Class.extend({
 		}
 
 		delete this._layers[id];
+		if(this._zoomBoundLayers[id]){
+			delete this._zoomBoundLayers[id];
+			this._updateZoomLevels();
+		}
 
 		if (this._loaded) {
 			this.fire('layerremove', {layer: layer});
@@ -550,8 +557,12 @@ L.Map = L.Class.extend({
 		this._container.removeChild(this._mapPane);
 	},
 
-	_addLayers: function (layers) {
-		layers = layers ? (L.Util.isArray(layers) ? layers : [layers]) : [];
+	_initLayers: function (layers) {
+		layers = layers ? (layers instanceof Array ? layers : [layers]) : [];
+
+		this._layers = {};
+		this._zoomBoundLayers = {};
+		this._tileLayersNum = 0;
 
 		for (var i = 0, len = layers.length; i < len; i++) {
 			this.addLayer(layers[i]);
@@ -608,45 +619,14 @@ L.Map = L.Class.extend({
 		L.DomUtil.setPosition(this._mapPane, this._getMapPanePos().subtract(offset));
 	},
 
-	_getZoomSpan: function () {
-		return this.getMaxZoom() - this.getMinZoom();
-	},
-
 	_updateZoomLevels: function () {
-		var i,
-			minZoom = Infinity,
-			maxZoom = -Infinity,
-			oldZoomSpan = this._getZoomSpan();
-
+		var i;
+		this._layersMinZoom = 0;
+		this._layersMaxZoom = Infinity;
 		for (i in this._zoomBoundLayers) {
-			var layer = this._zoomBoundLayers[i];
-			if (!isNaN(layer.options.minZoom)) {
-				minZoom = Math.min(minZoom, layer.options.minZoom);
-			}
-			if (!isNaN(layer.options.maxZoom)) {
-				maxZoom = Math.max(maxZoom, layer.options.maxZoom);
-			}
-		}
-
-		if (i === undefined) { // we have no tilelayers
-			this._layersMaxZoom = this._layersMinZoom = undefined;
-		} else {
-			this._layersMaxZoom = maxZoom;
-			this._layersMinZoom = minZoom;
-		}
-
-		if (oldZoomSpan !== this._getZoomSpan()) {
-			this.fire('zoomlevelschange');
-		}
-	},
-
-	_panInsideMaxBounds: function () {
-		this.panInsideBounds(this.options.maxBounds);
-	},
-
-	_checkIfLoaded: function () {
-		if (!this._loaded) {
-			throw new Error('Set map center and zoom first.');
+			var l = this._zoomBoundLayers[i];
+			this._layersMinZoom = Math.max(this._layersMinZoom, l.options.minZoom || 0);
+			this._layersMaxZoom = Math.min(this._layersMaxZoom, l.options.maxZoom || Infinity);
 		}
 	},
 
