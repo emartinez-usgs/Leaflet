@@ -161,6 +161,14 @@ L.Control.Layers = L.Control.extend({
 		}
 	},
 
+	_onLayerChange: function (e) {
+		var id = L.stamp(e.layer);
+
+		if (this._layers[id] && !this._handlingClick) {
+			this._update();
+		}
+	},
+
 	// IE7 bugs out if you create a radio dynamically, so you have to do it this hacky way (see http://bit.ly/PqYLBe)
 	_createRadioElement: function (name, checked) {
 
@@ -212,6 +220,8 @@ L.Control.Layers = L.Control.extend({
 		    inputsLen = inputs.length,
 		    baseLayer;
 
+		this._handlingClick = true;
+
 		for (i = 0; i < inputsLen; i++) {
 			input = inputs[i];
 			obj = this._layers[input.layerId];
@@ -230,6 +240,8 @@ L.Control.Layers = L.Control.extend({
 			this._map.setZoom(this._map.getZoom());
 			this._map.fire('baselayerchange', {layer: baseLayer});
 		}
+
+		this._handlingClick = false;
 	},
 
 	_expand: function () {
