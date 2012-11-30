@@ -129,6 +129,23 @@ L.DomUtil = {
 		return el;
 	},
 
+	disableTextSelection: function () {
+		if (document.selection && document.selection.empty) {
+			document.selection.empty();
+		}
+		if (!this._onselectstart) {
+			this._onselectstart = document.onselectstart;
+			document.onselectstart = L.Util.falseFn;
+		}
+	},
+
+	enableTextSelection: function () {
+		if (document.onselectstart === L.Util.falseFn && this._onselectstart) {
+			document.onselectstart = this._onselectstart;
+			this._onselectstart = null;
+		}
+	},
+
 	hasClass: function (el, name) {
 		return (el.className.length > 0) &&
 		        new RegExp("(^|\\s)" + name + "(\\s|$)").test(el.className);
