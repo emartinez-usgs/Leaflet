@@ -69,7 +69,7 @@ L.Marker = L.Class.extend({
 
 		this.update();
 
-		this.fire('move', { latlng: this._latlng });
+		return this.fire('move', { latlng: this._latlng });
 	},
 
 	setZIndexOffset: function (offset) {
@@ -86,10 +86,6 @@ L.Marker = L.Class.extend({
 		if (this._map) {
 			this._initIcon();
 			this.update();
-		}
-
-		if (this._popup) {
-			this.bindPopup(this._popup);
 		}
 
 		return this;
