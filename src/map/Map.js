@@ -507,10 +507,15 @@ L.Map = L.Class.extend({
 	_initLayout: function () {
 		var container = this._container;
 
-		L.DomUtil.addClass(container, 'leaflet-container' +
-			(L.Browser.touch ? ' leaflet-touch' : '') +
-			(L.Browser.retina ? ' leaflet-retina' : '') +
-			(this.options.fadeAnimation ? ' leaflet-fade-anim' : ''));
+		L.DomUtil.addClass(container, 'leaflet-container');
+
+		if (L.Browser.touch) {
+			L.DomUtil.addClass(container, 'leaflet-touch');
+		}
+
+		if (this.options.fadeAnimation) {
+			L.DomUtil.addClass(container, 'leaflet-fade-anim');
+		}
 
 		var position = L.DomUtil.getStyle(container, 'position');
 
