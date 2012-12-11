@@ -10,11 +10,6 @@ L.LatLng = function (rawLat, rawLng) { // (Number, Number)
 		throw new Error('Invalid LatLng object: (' + rawLat + ', ' + rawLng + ')');
 	}
 
-	if (noWrap !== true) {
-		lat = Math.max(Math.min(lat, 90), -90);					// clamp latitude into -90..90
-		lng = (lng + 180) % 360 + ((lng < -180 || lng === 180) ? 180 : -180);	// wrap longitude into -180..180
-	}
-
 	this.lat = lat;
 	this.lng = lng;
 };
@@ -38,7 +33,7 @@ L.LatLng.prototype = {
 		return margin <= L.LatLng.MAX_MARGIN;
 	},
 
-	toString: function (precision) { // -> String
+	toString: function (precision) { // (Number) -> String
 		return 'LatLng(' +
 		        L.Util.formatNum(this.lat, precision) + ', ' +
 		        L.Util.formatNum(this.lng, precision) + ')';
@@ -84,9 +79,6 @@ L.latLng = function (a, b) { // (LatLng) or ([Number, Number]) or (Number, Numbe
 	}
 	if (a === undefined || a === null) {
 		return a;
-	}
-	if (typeof a === 'object' && 'lat' in a) {
-		return new L.LatLng(a.lat, 'lng' in a ? a.lng : a.lon);
 	}
 	return new L.LatLng(a, b);
 };

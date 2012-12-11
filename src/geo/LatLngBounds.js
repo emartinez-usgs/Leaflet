@@ -68,27 +68,11 @@ L.LatLngBounds.prototype = {
 	},
 
 	getNorthWest: function () {
-		return new L.LatLng(this.getNorth(), this.getWest());
+		return new L.LatLng(this._northEast.lat, this._southWest.lng);
 	},
 
 	getSouthEast: function () {
-		return new L.LatLng(this.getSouth(), this.getEast());
-	},
-
-	getWest: function () {
-		return this._southWest.lng;
-	},
-
-	getSouth: function () {
-		return this._southWest.lat;
-	},
-
-	getEast: function () {
-		return this._northEast.lng;
-	},
-
-	getNorth: function () {
-		return this._northEast.lat;
+		return new L.LatLng(this._southWest.lat, this._northEast.lng);
 	},
 
 	contains: function (obj) { // (LatLngBounds) or (LatLng) -> Boolean
