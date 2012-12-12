@@ -16,8 +16,8 @@ L.Class.extend = function (props) {
 		}
 
 		// call all constructor hooks
-		for (var i = 0, len = this._initHooks.length; i < len; i++) {
-			this._initHooks[i].call(this);
+		if (this._initHooks) {
+			this.callInitHooks();
 		}
 	};
 
@@ -58,7 +58,20 @@ L.Class.extend = function (props) {
 	L.extend(proto, props);
 
 	// inherit constructor hooks
-	proto._initHooks = this.prototype._initHooks ? this.prototype._initHooks.slice() : [];
+	if (this.prototype._initHooks) {
+		proto._initHooks = this.prototype._initHooks.slice();
+	}
+
+	// add method for calling all hooks
+	proto.callInitHooks = function () {
+
+		if (this._initHooksCalled) { return; }
+		this._initHooksCalled = true;
+
+		for (var i = 0, len = this._initHooks.length; i < len; i++) {
+			this._initHooks[i].call(this);
+		}
+	}
 
 	return NewClass;
 };
@@ -82,5 +95,6 @@ L.Class.addInitHook = function (fn) { // (Function) || (String, args...)
 		this[fn].apply(this, args);
 	};
 
+	this.prototype._initHooks = this.prototype._initHooks || [];
 	this.prototype._initHooks.push(init);
 };
