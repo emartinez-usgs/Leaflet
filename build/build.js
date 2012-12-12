@@ -63,11 +63,19 @@ function getFiles(compsBase32) {
 	return files;
 }
 
-exports.getFiles = getFiles;
+exports.uglify = function (code) {
+	var toplevel = uglifyjs.parse(code);
+	toplevel.figure_out_scope();
 
-exports.lint = function () {
+	var compressor = uglifyjs.Compressor();
+	var compressed_ast = toplevel.transform(compressor);
 
-	var files = getFiles();
+	compressed_ast.figure_out_scope();
+	compressed_ast.compute_char_frequency();
+	compressed_ast.mangle_names();
+
+	return compressed_ast.print_to_string() + ';';
+};
 
 	console.log('Checking for JS errors...');
 
