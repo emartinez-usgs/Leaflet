@@ -100,10 +100,7 @@ L.LineUtil = {
 	// Used to avoid rendering parts of a polyline that are not currently visible.
 
 	clipSegment: function (a, b, bounds, useLastCode) {
-		var min = bounds.min,
-		    max = bounds.max,
-
-		    codeA = useLastCode ? this._lastCode : this._getBitCode(a, bounds),
+		var codeA = useLastCode ? this._lastCode : this._getBitCode(a, bounds),
 		    codeB = this._getBitCode(b, bounds),
 
 		    codeOut, p, newCode;

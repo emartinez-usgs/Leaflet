@@ -274,19 +274,6 @@ L.TileLayer = L.Class.extend({
 		this._initContainer();
 	},
 
-	_getTileSize: function () {
-		var map = this._map,
-		    zoom = map.getZoom(),
-		    zoomN = this.options.maxNativeZoom,
-		    tileSize = this.options.tileSize;
-
-		if (zoomN && zoom > zoomN) {
-			tileSize = Math.round(map.getZoomScale(zoom) / map.getZoomScale(zoomN) * tileSize);
-		}
-
-		return tileSize;
-	},
-
 	_update: function () {
 
 		if (!this._map) { return; }
