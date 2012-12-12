@@ -16,8 +16,8 @@ L.Class.extend = function (props) {
 		}
 
 		// call all constructor hooks
-		if (this._initHooks) {
-			this.callInitHooks();
+		for (var i = 0, len = this._initHooks.length; i < len; i++) {
+			this._initHooks[i].call(this);
 		}
 	};
 
@@ -57,6 +57,9 @@ L.Class.extend = function (props) {
 	// mix given properties into the prototype
 	L.extend(proto, props);
 
+	// inherit constructor hooks
+	proto._initHooks = this.prototype._initHooks ? this.prototype._initHooks.slice() : [];
+
 	return NewClass;
 };
 
@@ -69,4 +72,15 @@ L.Class.include = function (props) {
 // merge new default options to the Class
 L.Class.mergeOptions = function (options) {
 	L.extend(this.prototype.options, options);
+};
+
+// add a constructor hook
+L.Class.addInitHook = function (fn) { // (Function) || (String, args...)
+	var args = Array.prototype.slice.call(arguments, 1);
+
+	var init = typeof fn === 'function' ? fn : function () {
+		this[fn].apply(this, args);
+	};
+
+	this.prototype._initHooks.push(init);
 };
