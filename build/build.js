@@ -1,23 +1,25 @@
 var fs = require('fs'),
-    jshint = require('jshint'),
+
+	jshint = require('jshint'),
     UglifyJS = require('uglify-js'),
 
-    deps = require('./deps.js').deps,
-    hintrc = require('./hintrc.js').config;
+	deps = require('./deps.js').deps,
+	hintrc = require('./hintrc.js').config;
+
 
 function lintFiles(files) {
 
 	var errorsFound = 0,
-	    i, j, len, len2, src, errors, e;
+		i, j, len, len2, src, errors, e;
 
 	for (i = 0, len = files.length; i < len; i++) {
 
-		jshint.JSHINT(fs.readFileSync(files[i], 'utf8'), hintrc, i ? {L: true} : null);
+		jshint.JSHINT(fs.readFileSync(files[i], 'utf8'), hintrc);
 		errors = jshint.JSHINT.errors;
 
 		for (j = 0, len2 = errors.length; j < len2; j++) {
-			e = errors[j];
-			console.log(files[i] + '\tline ' + e.line + '\tcol ' + e.character + '\t ' + e.reason);
+			e = errors[i];
+			console.log(path + '\tline ' + e.line + '\tcol ' + e.character + '\t ' + e.reason);
 		}
 
 		errorsFound += len2;
@@ -63,19 +65,9 @@ function getFiles(compsBase32) {
 	return files;
 }
 
-exports.uglify = function (code) {
-	var toplevel = uglifyjs.parse(code);
-	toplevel.figure_out_scope();
+exports.lint = function () {
 
-	var compressor = uglifyjs.Compressor();
-	var compressed_ast = toplevel.transform(compressor);
-
-	compressed_ast.figure_out_scope();
-	compressed_ast.compute_char_frequency();
-	compressed_ast.mangle_names();
-
-	return compressed_ast.print_to_string() + ';';
-};
+	var files = getFiles();
 
 	console.log('Checking for JS errors...');
 
@@ -112,7 +104,7 @@ function loadSilently(path) {
 function combineFiles(files) {
 	var content = '';
 	for (var i = 0, len = files.length; i < len; i++) {
-		content += fs.readFileSync(files[i], 'utf8') + '\n\n';
+		content += fs.readFileSync(files[i]) + '\n\n';
 	}
 	return content;
 }
@@ -123,9 +115,9 @@ exports.build = function (compsBase32, buildName) {
 
 	console.log('Concatenating ' + files.length + ' files...');
 
-	var copy = fs.readFileSync('src/copyright.js', 'utf8'),
-	    intro = '(function (window, document, undefined) {',
-	    outro = '}(window, document));',
+	var copy = fs.readFileSync('src/copyright.js'),
+		intro = '(function (window, document, undefined) {',
+		outro = '}(this, document));',
 	    newSrc = copy + intro + combineFiles(files) + outro,
 
 	    pathPart = 'dist/leaflet' + (buildName ? '-' + buildName : ''),
@@ -148,8 +140,8 @@ exports.build = function (compsBase32, buildName) {
 	var path = pathPart + '.js',
 	    oldCompressed = loadSilently(path),
 	    newCompressed = copy + UglifyJS.minify(newSrc, {
-	        warnings: true,
-	        fromString: true
+	    	warnings: true,
+	    	fromString: true
 	    }).code,
 	    delta = getSizeDelta(newCompressed, oldCompressed);
 
@@ -161,17 +153,4 @@ exports.build = function (compsBase32, buildName) {
 		fs.writeFileSync(path, newCompressed);
 		console.log('\tSaved to ' + path);
 	}
-};
-
-exports.test = function() {
-	var karma = require('karma'),
-	    testConfig = {configFile : __dirname + '/../spec/karma.conf.js'};
-
-	testConfig.browsers = ['PhantomJS'];
-
-	if (isArgv('--chrome')) {
-		testConfig.browsers.push('Chrome');
-	}
-	var delta = newContent.replace(/\r\n?/g, '\n').length - oldContent.replace(/\r\n?/g, '\n').length;
-	return (delta >= 0 ? '+' : '') + delta;
 };
