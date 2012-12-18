@@ -123,14 +123,9 @@ L.Map.Keyboard = L.Handler.extend({
 	},
 
 	_onKeyDown: function (e) {
-		var key = e.keyCode,
-		    map = this._map;
-
-		if (key in this._panKeys) {
-
-			if (map._panAnim && map._panAnim._inProgress) { return; }
-
-			map.panBy(this._panKeys[key]);
+		var map = this._map,
+		    options = map.options,
+		    key = e.keyCode;
 
 			if (map.options.maxBounds) {
 				map.panInsideBounds(map.options.maxBounds);
@@ -143,7 +138,15 @@ L.Map.Keyboard = L.Handler.extend({
 			return;
 		}
 
+		if (options.maxBounds) {
+			L.Util.requestAnimFrame(this._panInsideMaxBounds, map, true, map._container);
+		}
+
 		L.DomEvent.stop(e);
+	},
+
+	_panInsideMaxBounds: function () {
+		this.panInsideBounds(this.options.maxBounds);
 	}
 });
 
