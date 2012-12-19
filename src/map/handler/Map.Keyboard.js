@@ -123,30 +123,24 @@ L.Map.Keyboard = L.Handler.extend({
 	},
 
 	_onKeyDown: function (e) {
-		var map = this._map,
-		    options = map.options,
-		    key = e.keyCode;
+		var key = e.keyCode,
+		    map = this._map;
+
+		if (this._panKeys.hasOwnProperty(key)) {
+			map.panBy(this._panKeys[key]);
 
 			if (map.options.maxBounds) {
 				map.panInsideBounds(map.options.maxBounds);
 			}
 
-		} else if (key in this._zoomKeys) {
+		} else if (this._zoomKeys.hasOwnProperty(key)) {
 			map.setZoom(map.getZoom() + this._zoomKeys[key]);
 
 		} else {
 			return;
 		}
 
-		if (options.maxBounds) {
-			L.Util.requestAnimFrame(this._panInsideMaxBounds, map, true, map._container);
-		}
-
 		L.DomEvent.stop(e);
-	},
-
-	_panInsideMaxBounds: function () {
-		this.panInsideBounds(this.options.maxBounds);
 	}
 });
 
