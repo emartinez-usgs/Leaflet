@@ -1,6 +1,6 @@
 /*
-	L.Mixin.Events is used to add custom events functionality to Leaflet classes.
-*/
+ * L.Mixin.Events is used to add custom events functionality to Leaflet classes.
+ */
 
 var eventsKey = '_leaflet_events';
 

@@ -1,5 +1,5 @@
 /*
- * L.Polyline is used to display polylines on a map.
+ * L.Polygon is used to display polylines on a map.
  */
 
 L.Polyline = L.Path.extend({
