@@ -116,6 +116,29 @@ describe('Util', function() {
 
 
 	describe('#getParamString', function() {
+		it('should create a valid query string for appending depending on url input', function() {
+			var a = {
+				url:"http://example.com/get",
+				obj:{bar: 7, baz: 3},
+				result:"?bar=7&baz=3"
+			}
+
+			expect(L.Util.getParamString(a.obj,a.url)).toEqual(a.result);
+			
+			var b = {	
+				url:"http://example.com/get?justone=qs",
+				obj:{bar: 7, baz: 3},
+				result:"&bar=7&baz=3"
+			}
+			
+			expect(L.Util.getParamString(b.obj,b.url)).toEqual(b.result);
+
+		});
+	});
+
+	// TODO cancel/requestAnimFrame?
+
+	describe('#getParamString', function() {
 		it('creates a valid query string for appending depending on url input', function() {
 			var a = {
 				url: "http://example.com/get",
@@ -187,26 +210,5 @@ describe('Util', function() {
 
 	// TODO setOptions
 
-	describe('#template', function () {
-		it('evaluates templates with a given data object', function () {
-			var tpl = 'Hello {foo} and {bar}!';
-
-			var str = L.Util.template(tpl, {
-				foo: 'Vlad',
-				bar: 'Dave'
-			});
-
-			expect(str).to.eql('Hello Vlad and Dave!');
-		});
-
-		it('does not modify text without a token variable', function () {
-			expect(L.Util.template('foo', {})).to.eql('foo');
-		});
-
-		it('throws when a template token is not given', function () {
-			expect(function () {
-				L.Util.template(tpl, {foo: 'bar'});
-			}).to.throwError();
-		});
-	});
+	// TODO template
 });
