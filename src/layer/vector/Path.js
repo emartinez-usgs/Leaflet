@@ -75,8 +75,6 @@ L.Path = L.Class.extend({
 			this._fill = null;
 		}
 
-		this.fire('remove');
-
 		map.off({
 			'viewreset': this.projectLatlngs,
 			'moveend': this._updatePath
