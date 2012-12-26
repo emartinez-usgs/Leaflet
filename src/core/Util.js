@@ -97,18 +97,12 @@ L.Util = {
 		return obj.options;
 	},
 
-	getParamString: function (obj, existing_url) {
+	getParamString: function (obj, existingUrl) {
 		var params = [];
 		for (var i in obj) {
 			params.push(encodeURIComponent(uppercase ? i.toUpperCase() : i) + '=' + encodeURIComponent(obj[i]));
 		}
-		if (existing_url.indexOf('?')===-1) {
-			return '?' + params.join('&');
-		}
-		else {
-			return '&' + params.join('&');
-		}
-		
+		return (existingUrl.indexOf('?') === -1 ? '?' : '&') + params.join('&');
 	},
 
 	template: function (str, data) {
