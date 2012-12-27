@@ -102,7 +102,7 @@ L.Util = {
 		for (var i in obj) {
 			params.push(encodeURIComponent(uppercase ? i.toUpperCase() : i) + '=' + encodeURIComponent(obj[i]));
 		}
-		return (existingUrl.indexOf('?') === -1 ? '?' : '&') + params.join('&');
+		return ((!existingUrl || existingUrl.indexOf('?') === -1) ? '?' : '&') + params.join('&');
 	},
 
 	template: function (str, data) {
