@@ -14,16 +14,11 @@
     <script>
         L_PREFER_CANVAS = true;
         $(document).ready(function() {
-            var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/d4fc77ea4a63471cab2423e66626cbb6/997/256/{z}/{x}/{y}.png',
-            cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
-            cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 18, attribution: cloudmadeAttribution});
-
             var map = L.map('map', {
                 minZoom: 1,
                 maxZoom: 19,
                 center: [51.505, -0.09],
-                zoom: 9,
-                layers: [cloudmade]
+                zoom: 9
             });
 
             var polygons = new L.FeatureGroup();
@@ -32,11 +27,10 @@
             polygons.addLayer(
             new L.Polyline(
             points, {
-                weight: 10,
+                weight: 2,
                 opacity: 1,
                 smoothFactor: 1,
-                color: 'red',
-                clickable:true
+                color: 'red'
             }));
 
             polygons.on('click', function(m) {
@@ -49,8 +43,6 @@
         });
     </script>
 
-
-    <script type="text/javascript" src="../../build/deps.js"></script>
     <script src="../leaflet-include.js"></script>
 </head>
 <body>
