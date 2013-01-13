@@ -15,9 +15,8 @@ L.Popup = L.Class.extend({
 		maxHeight: null,
 		autoPan: true,
 		closeButton: true,
-		offset: [0, 7],
-		autoPanPadding: [5, 5],
-		keepInView: false,
+		offset: new L.Point(0, 6),
+		autoPanPadding: new L.Point(5, 5),
 		className: '',
 		zoomAnimation: true
 	},
@@ -27,7 +26,6 @@ L.Popup = L.Class.extend({
 
 		this._source = source;
 		this._animated = L.Browser.any3d && this.options.zoomAnimation;
-		this._isOpen = false;
 	},
 
 	onAdd: function (map) {
@@ -45,7 +43,15 @@ L.Popup = L.Class.extend({
 		}
 		map._panes.popupPane.appendChild(this._container);
 
-		map.on(this._getEvents(), this);
+		map.on('viewreset', this._updatePosition, this);
+
+		if (this._animated) {
+			map.on('zoomanim', this._zoomAnimation, this);
+		}
+
+		if (map.options.closePopupOnClick) {
+			map.on('preclick', this._close, this);
+		}
 
 		this._update();
 
@@ -132,7 +138,8 @@ L.Popup = L.Class.extend({
 
 	_initLayout: function () {
 		var prefix = 'leaflet-popup',
-			containerClass = prefix + ' ' + this.options.className + ' leaflet-zoom-animated',
+			containerClass = prefix + ' ' + this.options.className + ' leaflet-zoom-' +
+			        (this._animated ? 'animated' : 'hide'),
 			container = this._container = L.DomUtil.create('div', containerClass),
 			closeButton;
 
@@ -220,7 +227,7 @@ L.Popup = L.Class.extend({
 		if (!this._map) { return; }
 
 		var pos = this._map.latLngToLayerPoint(this._latlng),
-		    is3d = L.Browser.any3d,
+		    animated = this._animated,
 		    offset = this.options.offset;
 
 		if (animated) {
