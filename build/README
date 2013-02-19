@@ -1,0 +1,26 @@
+This branch contains a custom build that is smaller than the standard Leaflet
+build. The following classes have been removed. See build/deps.js for an
+up-to-date list of dependencies since this README file may get out of date.
+
+	EPSG3395
+	TileLayerWMS
+	TileLayerCanvas
+	ImageOverlay
+	DivIcon
+	Popup
+	FeatureGroup
+	Path
+	PathVML
+	PathCanvas
+	Polyline
+	Polygon
+	MultiPoly
+	Rectangle
+	Circle
+	CircleMarker
+	VectorsCanvas
+	GeoJSON
+	MarkerDrag
+	PolyEdit
+	ControlLayers
+	Geolocation

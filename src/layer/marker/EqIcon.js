@@ -16,6 +16,9 @@ L.EqIcon = L.Class.extend({
 
 		this._setIconClasses(el);
 		this._setIconStyles(el);
+		if ('iconId' in this.options) {
+			el.setAttribute('id', this.options.iconId);
+		}
 
 		return el;
 	},
