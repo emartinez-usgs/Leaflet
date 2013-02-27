@@ -3,6 +3,7 @@
  * This code allows you to handle any possible namespace conflicts.
  */
 
+/*global L:true*/
 var L, originalL;
 
 if (typeof exports !== undefined + '') {

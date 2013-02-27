@@ -23,7 +23,7 @@ L.Map.BoxZoom = L.Handler.extend({
 	},
 
 	_onMouseDown: function (e) {
-		if (!e.shiftKey || ((e.which !== 1) && (e.button !== 1))) { return false; }
+		if ((!L.DomUtil.hasClass(this._container, 'leaflet-box-zooming') && !e.shiftKey) || ((e.which !== 1) && (e.button !== 1))) { return false; }
 
 		L.DomUtil.disableTextSelection();
 
@@ -81,6 +81,10 @@ L.Map.BoxZoom = L.Handler.extend({
 		        map.layerPointToLatLng(layerPoint));
 
 		map.fitBounds(bounds);
+
+		if (L.DomUtil.hasClass(this._container, 'leaflet-box-zooming')) {
+			L.DomUtil.removeClass(this._container, 'leaflet-box-zooming');
+		}
 
 		map.fire("boxzoomend", {
 			boxZoomBounds: bounds

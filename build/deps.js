@@ -66,6 +66,12 @@ var deps = {
 		desc: 'Lightweight div-based icon for markers.'
 	},
 
+	EqIcon: {
+		src: ['layer/marker/EqIcon.js'],
+		deps: ['Marker'],
+		desc: 'Lightweight marker for Earthquakes.'
+	},
+
 	Popup: {
 		src: ['layer/Popup.js',
 		      'layer/marker/Marker.Popup.js',
