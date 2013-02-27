@@ -16,6 +16,7 @@
 
 		'dom/DomEvent.js',
 		'dom/DomEvent.DoubleTap.js',
+		'dom/DomEvent.MsTouch.js',
 		'dom/DomUtil.js',
 		'dom/Draggable.js',
 
@@ -37,6 +38,7 @@
 		'geo/crs/CRS.EPSG3857.js',
 		'geo/crs/CRS.EPSG4326.js',
 		'geo/crs/CRS.EPSG3395.js',
+		'geo/crs/CRS.Simple.js',
 
 		'map/Map.js',
 
@@ -126,4 +128,8 @@ function getRandomLatLng(map) {
 	return new L.LatLng(
 			southWest.lat + latSpan * Math.random(),
 	        southWest.lng + lngSpan * Math.random());
+}
+
+function logEvent(e) {
+	console.log(e.type);
 }
