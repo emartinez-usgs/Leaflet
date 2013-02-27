@@ -1,26 +1,60 @@
-This branch contains a custom build that is smaller than the standard Leaflet
-build. The following classes have been removed. See build/deps.js for an
-up-to-date list of dependencies since this README file may get out of date.
+This README describes how to build a "lite" version suitable for use on
+earthquake.
 
-	EPSG3395
-	TileLayerWMS
-	TileLayerCanvas
-	ImageOverlay
-	DivIcon
-	Popup
-	FeatureGroup
-	Path
-	PathVML
-	PathCanvas
-	Polyline
-	Polygon
-	MultiPoly
-	Rectangle
-	Circle
-	CircleMarker
-	VectorsCanvas
-	GeoJSON
-	MarkerDrag
-	PolyEdit
-	ControlLayers
-	Geolocation
+Use: "earthquake" branch in emartinez-usgs github repo. Build as follows:
+
+Install build dependencies:
+ - Node (npm)
+ - npm install -g jake
+ - npm install -g jshint
+ - npm install uglify-js
+
+Run this command:
+	jake build[7n7o01a5,custom]
+
+If the above instructions produce a build that appears broken, use the leaflet
+build helper tool:
+
+build/build.html (from leaflet source directory)
+
+The following classes are required (marked with a star):
+
+	* Core
+	  EPSG3395
+	* TileLayer
+	  TileLayerWMS
+	  TileLayerCanvas
+	  ImageOverlay
+	* Marker
+	  DivIcon
+	* EqIcon
+	  Popup
+	* LayerGroup
+	  FeatureGroup
+	  Path
+	  PathVML
+	  PathCanvas
+	  Polyline
+	  Polygon
+	  MultiPoly
+	  Rectangle
+	  Circle
+	  CircleMarker
+	  VectorsCanvas
+	  GeoJSON
+	* MapDrag
+	* MouseZoom
+	* TouchZoom
+	* BoxZoom
+	* Keyboard
+	  MarkerDrag
+	  PolyEdit
+	* ControlZoom
+	* ControlAttrib
+	* ControlScale
+	  ControlLayers
+	* AnimationPan
+	* AnimationTimer
+	* AnimationZoom
+	* Geolocation
+
