@@ -23,14 +23,12 @@ var deps = {
 	},
 
 
-	/*
 	EPSG3395: {
 		src: ['geo/projection/Projection.Mercator.js',
 		      'geo/crs/CRS.EPSG3395.js'],
 		desc: 'EPSG:3395 projection (used by some map providers).',
 		heading: 'Additional projections'
 	},
-	*/
 
 	TileLayer: {
 		src: ['layer/tile/TileLayer.js'],
@@ -38,28 +36,22 @@ var deps = {
 		heading: 'Layers'
 	},
 
-	/*
 	TileLayerWMS: {
 		src: ['layer/tile/TileLayer.WMS.js'],
 		desc: 'WMS tile layer.',
 		deps: ['TileLayer']
 	},
-	*/
 
-	/*
 	TileLayerCanvas: {
 		src: ['layer/tile/TileLayer.Canvas.js'],
 		desc: 'Tile layer made from canvases (for custom drawing purposes).',
 		deps: ['TileLayer']
 	},
-	*/
 
-	/*
 	ImageOverlay: {
 		src: ['layer/ImageOverlay.js'],
 		desc: 'Used to display an image over a particular rectangular area of the map.'
 	},
-	*/
 
 	Marker: {
 		src: ['layer/marker/Icon.js',
@@ -68,13 +60,11 @@ var deps = {
 		desc: 'Markers to put on the map.'
 	},
 
-	/*
 	DivIcon: {
 		src: ['layer/marker/DivIcon.js'],
 		deps: ['Marker'],
 		desc: 'Lightweight div-based icon for markers.'
 	},
-	*/
 
 	EqIcon: {
 		src: ['layer/marker/EqIcon.js'],
@@ -82,7 +72,6 @@ var deps = {
 		desc: 'Lightweight marker for Earthquakes.'
 	},
 
-	/*
 	Popup: {
 		src: ['layer/Popup.js',
 		      'layer/marker/Marker.Popup.js',
@@ -90,23 +79,19 @@ var deps = {
 		deps: ['Marker'],
 		desc: 'Used to display the map popup (used mostly for binding HTML data to markers and paths on click).'
 	},
-	*/
 
 	LayerGroup: {
 		src: ['layer/LayerGroup.js'],
 		desc: 'Allows grouping several layers to handle them as one.'
 	},
 
-	/*
 	FeatureGroup: {
 		src: ['layer/FeatureGroup.js'],
 		deps: ['LayerGroup', 'Popup'],
 		desc: 'Extends LayerGroup with mouse events and bindPopup method shared between layers.'
 	},
-	*/
 
 
-	/*
 	Path: {
 		src: ['layer/vector/Path.js',
 		      'layer/vector/Path.SVG.js',
@@ -114,74 +99,56 @@ var deps = {
 		desc: 'Vector rendering core (SVG-powered), enables overlaying the map with SVG paths.',
 		heading: 'Vector layers'
 	},
-	*/
 
-	/*
 	PathVML: {
 		src: ['layer/vector/Path.VML.js'],
 		desc: 'VML fallback for vector rendering core (IE 6-8).'
 	},
-	*/
 
-	/*
 	PathCanvas: {
 		src: ['layer/vector/canvas/Path.Canvas.js'],
 		deps: ['Path', 'Polyline', 'Polygon', 'Circle'],
 		desc: 'Canvas fallback for vector rendering core (makes it work on Android 2+).'
 	},
-	*/
 
-	/*
 	Polyline: {
 		src: ['geometry/LineUtil.js',
 		      'layer/vector/Polyline.js'],
 		deps: ['Path'],
 		desc: 'Polyline overlays.'
 	},
-	*/
 
-	/*
 	Polygon: {
 		src: ['geometry/PolyUtil.js',
 		      'layer/vector/Polygon.js'],
 		deps: ['Polyline'],
 		desc: 'Polygon overlays.'
 	},
-	*/
 
-	/*
 	MultiPoly: {
 		src: ['layer/vector/MultiPoly.js'],
 		deps: ['FeatureGroup', 'Polyline', 'Polygon'],
 		desc: 'MultiPolygon and MultyPolyline layers.'
 	},
-	*/
 
-	/*
 	Rectangle: {
 		src: ['layer/vector/Rectangle.js'],
 		deps: ['Polygon'],
 		desc: ['Rectangle overlays.']
 	},
-	*/
 
-	/*
 	Circle: {
 		src: ['layer/vector/Circle.js'],
 		deps: ['Path'],
 		desc: 'Circle overlays (with radius in meters).'
 	},
-	*/
 
-	/*
 	CircleMarker: {
 		src: ['layer/vector/CircleMarker.js'],
 		deps: ['Circle'],
 		desc: 'Circle overlays with a constant pixel radius.'
 	},
-	*/
 
-	/*
 	VectorsCanvas: {
 		src: ['layer/vector/canvas/Polyline.Canvas.js',
 		      'layer/vector/canvas/Polygon.Canvas.js',
@@ -189,15 +156,12 @@ var deps = {
 		deps: ['PathCanvas', 'Polyline', 'Polygon', 'Circle'],
 		desc: 'Canvas fallback for vector layers (polygons, polylines, circles)'
 	},
-	*/
 
-	/*
 	GeoJSON: {
 		src: ['layer/GeoJSON.js'],
 		deps: ['Marker', 'MultiPoly', 'FeatureGroup'],
 		desc: 'GeoJSON layer, parses the data and adds corresponding layers above.'
 	},
-	*/
 
 
 	MapDrag: {
@@ -237,21 +201,17 @@ var deps = {
 		desc: 'Enables keyboard pan/zoom when the map is focused.'
 	},
 
-	/*
 	MarkerDrag: {
 		src: ['layer/marker/Marker.Drag.js'],
 		deps: ['Marker'],
 		desc: 'Makes markers draggable (by mouse or touch).'
 	},
-	*/
 
-	/*
 	PolyEdit: {
 		src: ['layer/vector/Polyline.Edit.js'],
 		deps: ['Polyline', 'DivIcon'],
 		desc: 'Polyline and polygon editing.'
 	},
-	*/
 
 
 	ControlZoom: {
@@ -276,14 +236,12 @@ var deps = {
 		desc: 'Scale control.'
 	},
 
-	/*
 	ControlLayers: {
 		src: ['control/Control.js',
 		      'map/ext/Map.Control.js',
 		      'control/Control.Layers.js'],
 		desc: 'Layer Switcher control.'
 	},
-	*/
 
 
 	AnimationPan: {

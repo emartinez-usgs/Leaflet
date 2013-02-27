@@ -81,7 +81,7 @@ L.Map.BoxZoom = L.Handler.extend({
 		        map.layerPointToLatLng(layerPoint));
 
 		map.fitBounds(bounds);
-		
+
 		if (L.DomUtil.hasClass(this._container, 'leaflet-box-zooming')) {
 			L.DomUtil.removeClass(this._container, 'leaflet-box-zooming');
 		}
