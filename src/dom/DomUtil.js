@@ -198,10 +198,22 @@ L.DomUtil = {
 
 	setPosition: function (el, point, disable3D) { // (HTMLElement, Point[, Boolean])
 
+		var previousTransform = null,
+		    previousPos = el._leaflet_pos;
+
 		el._leaflet_pos = point;
 
 		if (!disable3D && L.Browser.any3d) {
-			el.style[L.DomUtil.TRANSFORM] =  L.DomUtil.getTranslateString(point);
+
+			previousTransform = el.style[L.DomUtil.TRANSFORM] || '';
+
+			if (previousPos) {
+				el.style[L.DomUtil.TRANSFORM] = previousTransform.replace(
+					L.DomUtil.getTranslateString(previousPos),
+					L.DomUtil.getTranslateString(point));
+			} else {
+				el.style[L.DomUtil.TRANSFORM] = previousTransform + ' ' + L.DomUtil.getTranslateString(point);
+			}
 
 			// workaround for Android 2/3 stability (https://github.com/CloudMade/Leaflet/issues/69)
 			if (L.Browser.mobileWebkit3d) {
