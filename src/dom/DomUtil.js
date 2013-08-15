@@ -198,8 +198,7 @@ L.DomUtil = {
 
 	setPosition: function (el, point, disable3D) { // (HTMLElement, Point[, Boolean])
 
-		var previousTransform = null,
-		    previousPos = el._leaflet_pos;
+		var previousTransform = null;
 
 		el._leaflet_pos = point;
 
@@ -207,12 +206,14 @@ L.DomUtil = {
 
 			previousTransform = el.style[L.DomUtil.TRANSFORM] || '';
 
-			if (previousPos) {
+			if (previousTransform.indexOf('translate') !== -1) {
+				// replace existing translate
 				el.style[L.DomUtil.TRANSFORM] = previousTransform.replace(
-					L.DomUtil.getTranslateString(previousPos),
+					/translate(3d)?\([^\)]+\)/i,
 					L.DomUtil.getTranslateString(point));
 			} else {
-				el.style[L.DomUtil.TRANSFORM] = previousTransform + ' ' + L.DomUtil.getTranslateString(point);
+				// insert translate before any other transforms (like rotate)
+				el.style[L.DomUtil.TRANSFORM] = L.DomUtil.getTranslateString(point) + ' ' + previousTransform;
 			}
 
 			// workaround for Android 2/3 stability (https://github.com/CloudMade/Leaflet/issues/69)
