@@ -17,7 +17,7 @@ exports.config = {
 	"curly": true,
 	"eqnull": false,
 	"evil": false,
-	"expr": false,
+	"expr": true,
 	"forin": true,
 	"immed": true,
 	"latedef": true,
@@ -42,6 +42,5 @@ exports.config = {
 
 	"eqeqeq": true,
 	"trailing": true,
-	"white": true,
 	"smarttabs": true
 };

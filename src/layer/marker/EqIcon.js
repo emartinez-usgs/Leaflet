@@ -29,12 +29,12 @@ L.EqIcon = L.Class.extend({
 
 	_setIconStyles: function (el) {
 		var styles = this.options.iconStyles;
-		el.style.cssText = this.options.iconStyles.join(';');
+		el.style.cssText = styles.join(';');
 	},
 
 	_setIconClasses: function (el) {
 		var classes = this.options.iconClasses;
-		el.className = this.options.className + ' ' + this.options.iconClasses.join(' ');
+		el.className = this.options.className + ' ' + classes.join(' ');
 	}
 });
 
